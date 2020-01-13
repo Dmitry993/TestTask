@@ -6,25 +6,33 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using OAuth2.Client.Impl;
 using OAuth2.Infrastructure;
 
 namespace NewsPortal.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    
+    public class AuthController : Controller
     {
-        [HttpPost]
-        [Route("login")]
+        private IConfiguration _config;       
+
+        public AuthController(IConfiguration config)
+        {
+            _config = config;            
+        }
+
+        [HttpGet]        
         public async Task<ActionResult> GoogleSignIn()
-        {           
-            var redirectUri = new Uri(Url.Action("GoogleLoginCallBack", "Account", null, protocol: Request.Scheme));
-            var googleClient = new GoogleClient(new RequestFactory(), new OAuth2.Configuration.ClientConfiguration
+        {
+            var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
+            var clientSecret = _config.GetSection("Authentication:Google:ClientSecret").Value;
+            var redirectUri = new Uri(Url.Action("GoogleLoginCallBack", "Auth", null));           
+            var googleClient = new GoogleClient(new RequestFactory(), new OAuth2.Configuration.ClientConfiguration            
             {
-                ClientId = "1097896526158 - luavjh43lrku3a8nhpkqii6dgpumt9jj.apps.googleusercontent.com".Trim(),
-                ClientSecret = "qbqOZP3Kgj3J-0dXT-F5950h".Trim(),
-                RedirectUri = "http://localhost:65277",
+                ClientId = clientID?.Trim(),
+                ClientSecret = clientSecret?.Trim(),
+                RedirectUri = redirectUri.ToString(),
                 Scope = "profile email"
             });
             return Redirect(await googleClient.GetLoginLinkUriAsync("SomeStateValueYouWantToUse"));
@@ -32,13 +40,15 @@ namespace NewsPortal.Web.Controllers
 
         //public ActionResult GoogleLoginCallBack()
         //{
-        //    var code = Request.QueryString["code"];
-        //    var redirectUri = new Uri(Url.Action("GoogleLoginCallBack", "Account", null, protocol: Request.Scheme));
+        //    var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
+        //    var clientSecret = _config.GetSection("Authentication:Google:ClientSecret").Value;
+        //    //var code = Request.QueryString["code"];
+        //    var redirectUri = new Uri(Url.Action("GoogleSignIn", "Auth", null));
         //    var googleClient = new GoogleClient(new RequestFactory(), new OAuth2.Configuration.ClientConfiguration
         //    {
-        //        ClientId = "1097896526158 - luavjh43lrku3a8nhpkqii6dgpumt9jj.apps.googleusercontent.com".Trim(),
-        //        ClientSecret = "qbqOZP3Kgj3J-0dXT-F5950h".Trim(),
-        //        RedirectUri = redirectUrl,
+        //        ClientId = clientID?.Trim(),
+        //        ClientSecret = clientSecret?.Trim(),
+        //        //RedirectUri = redirectUrl,
         //        Scope = "profile email"
         //    });
 
@@ -51,10 +61,10 @@ namespace NewsPortal.Web.Controllers
         //        return RedirectToAction("LoginError", new { error = ex.Message });
         //    }
 
-        //    // do your validation and allow the user to proceed
-        //    if (SignInManager.IsUserValid(userInfo.Email))
+        //    do your validation and allow the user to proceed
+        //    if (_signInManager.IsUserValid(userInfo.Email))
         //    {
-        //        SignInManager.Login(userInfo.Email);
+        //        _signInManager.Login(userInfo.Email);
         //        return RedirectToAction("Index", "Home", new { error = ex.Message });
         //    }
         //    return Redirect(googleClient"LoginError", new { error = "User does not exists in the system" });
