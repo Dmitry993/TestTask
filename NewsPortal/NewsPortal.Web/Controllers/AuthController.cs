@@ -9,65 +9,96 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OAuth2.Client.Impl;
 using OAuth2.Infrastructure;
+using NewsPortal.Logic.Model;
+using RestSharp;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NewsPortal.Web.Controllers
 {
-    
+
     public class AuthController : Controller
     {
-        private IConfiguration _config;       
+        private IConfiguration _config;
+
 
         public AuthController(IConfiguration config)
         {
-            _config = config;            
+            _config = config;
+
         }
 
-        [HttpGet]        
+        [Authorize]
+        public ActionResult Index()
+        {
+            return RedirectToPage("/Index");
+        }
+
+        [HttpGet]
         public async Task<ActionResult> GoogleSignIn()
         {
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
             var clientSecret = _config.GetSection("Authentication:Google:ClientSecret").Value;
-            var redirectUri = new Uri(Url.Action("GoogleLoginCallBack", "Auth", null));           
-            var googleClient = new GoogleClient(new RequestFactory(), new OAuth2.Configuration.ClientConfiguration            
+            var redirectUri = new Uri(Url.Action("GoogleLoginCallBack", "Auth", null, "https"));
+            var googleClient = new GoogleClient(new RequestFactory(), new OAuth2.Configuration.ClientConfiguration
             {
                 ClientId = clientID?.Trim(),
                 ClientSecret = clientSecret?.Trim(),
                 RedirectUri = redirectUri.ToString(),
-                Scope = "profile email"
+                Scope = "profile email"               
             });
-            return Redirect(await googleClient.GetLoginLinkUriAsync("SomeStateValueYouWantToUse"));
+
+            return Redirect(await googleClient.GetLoginLinkUriAsync());
         }
 
-        //public ActionResult GoogleLoginCallBack()
-        //{
-        //    var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
-        //    var clientSecret = _config.GetSection("Authentication:Google:ClientSecret").Value;
-        //    //var code = Request.QueryString["code"];
-        //    var redirectUri = new Uri(Url.Action("GoogleSignIn", "Auth", null));
-        //    var googleClient = new GoogleClient(new RequestFactory(), new OAuth2.Configuration.ClientConfiguration
-        //    {
-        //        ClientId = clientID?.Trim(),
-        //        ClientSecret = clientSecret?.Trim(),
-        //        //RedirectUri = redirectUrl,
-        //        Scope = "profile email"
-        //    });
 
-        //    try
-        //    {
-        //        userInfo = oauth.GetUserInfo(new NameValueCollection() { { "code", code } });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return RedirectToAction("LoginError", new { error = ex.Message });
-        //    }
+        public async Task<ActionResult> GoogleLoginCallBack()
+        {
+            var code = HttpContext.Request.Query["code"];
+            var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
+            var clientSecret = _config.GetSection("Authentication:Google:ClientSecret").Value;
+            var googleClient = new GoogleClient(new RequestFactory(), new OAuth2.Configuration.ClientConfiguration
+            {
+                ClientId = clientID?.Trim(),
+                ClientSecret = clientSecret?.Trim(),
+                RedirectUri = "https://localhost:44307/",
+                Scope = "profile email"
+            });
 
-        //    do your validation and allow the user to proceed
-        //    if (_signInManager.IsUserValid(userInfo.Email))
-        //    {
-        //        _signInManager.Login(userInfo.Email);
-        //        return RedirectToAction("Index", "Home", new { error = ex.Message });
-        //    }
-        //    return Redirect(googleClient"LoginError", new { error = "User does not exists in the system" });
-        //}
+           
+
+            var claims = new List<Claim>
+            {
+                //new Claim(ClaimTypes.Name, user.Email),
+                //new Claim("FullName", user.FullName),
+                new Claim(ClaimTypes.Role, "Administrator"),
+            };
+
+           
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(10)
+                });
+
+            var cookies = Request.Cookies;
+
+            return RedirectToAction("Index");
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult> GoogleSignOut()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToPage("/Login");
+        }
     }
 }
