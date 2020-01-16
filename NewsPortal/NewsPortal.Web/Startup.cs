@@ -32,18 +32,25 @@ namespace NewsPortal.Web
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
-            });            
+            });
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".Works.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddAuthentication(options =>
             {
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;                
             })        
             .AddCookie(options=>
             {
-                options.LoginPath = "/Login";                
+                options.LoginPath = "/Login";
             });
           
             _clientID = Configuration["Authentication:Google:ClientId"];
@@ -68,7 +75,8 @@ namespace NewsPortal.Web
             app.UseRouting();           
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCookiePolicy();            
+            app.UseCookiePolicy();
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
