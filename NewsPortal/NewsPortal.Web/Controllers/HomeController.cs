@@ -7,9 +7,10 @@ using NewsPortal.Web.Attributes;
 
 namespace NewsPortal.Web.Controllers
 {
-    [CustomAuthorize]
+    
     public class HomeController : Controller
     {
+        [CustomAuthorize]
         public IActionResult Index()
         {
             return View();

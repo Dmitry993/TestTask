@@ -15,10 +15,7 @@ using NewsPortal.Logic.Model;
 namespace NewsPortal.Web
 {
     public class Startup
-    {
-        private string _clientID = null;
-        private string _clientSecret = null;
-
+    {     
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public Startup(IConfiguration configuration)
@@ -32,15 +29,7 @@ namespace NewsPortal.Web
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
-            });
-
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.Cookie.Name = ".Works.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.IsEssential = true;
-            });
+            });                 
 
             services.AddAuthentication(options =>
             {
@@ -50,11 +39,8 @@ namespace NewsPortal.Web
             })        
             .AddCookie(options=>
             {
-                options.Cookie.Name = "MyCookie";              
-            });
-          
-            _clientID = Configuration["Authentication:Google:ClientId"];
-            _clientSecret = Configuration["Authentication:Google:ClientSecret"];
+                options.Cookie.Name = "AuthorizationToken";                
+            });              
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,8 +61,7 @@ namespace NewsPortal.Web
             app.UseRouting();           
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCookiePolicy();
-            app.UseSession();
+            app.UseCookiePolicy();           
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

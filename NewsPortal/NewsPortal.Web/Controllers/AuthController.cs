@@ -17,13 +17,14 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using NewsPortal.Web.Attributes;
 using OAuth2.Models;
+using Microsoft.AspNetCore.Localization;
 
 namespace NewsPortal.Web.Controllers
 {
 
     public class AuthController : Controller
     {
-        public const string SessionKey = "_AccessToken";
+        public const string AuthorizationToken = "AuthorizationToken";
 
         private IConfiguration _config;
 
@@ -36,8 +37,7 @@ namespace NewsPortal.Web.Controllers
         {
             return View("Login");
         }
-
-        [HttpGet]        
+        
         public async Task<ActionResult> GoogleSignIn()
         {
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
@@ -69,7 +69,7 @@ namespace NewsPortal.Web.Controllers
                 ClientSecret = clientSecret?.Trim(),
                 RedirectUri = redirectUri.ToString(),
                 Scope = "profile email"
-            });          
+            });
 
             try
             {
@@ -78,35 +78,21 @@ namespace NewsPortal.Web.Controllers
             catch (Exception ex)
             {
                 return RedirectToAction("LoginError", new { error = ex.Message });
-            }            
-
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKey)))
-            {
-                HttpContext.Session.SetString(SessionKey, googleClient.AccessToken);
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userInfo.FirstName),
-                new Claim(ClaimTypes.Email, userInfo.Email),
-                new Claim(ClaimTypes.Role, "Administrator"),
-                new Claim("Access_token", googleClient.AccessToken)
-            };
-            
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);            
+            HttpContext.Response.Cookies.Append(
+                AuthorizationToken, 
+                googleClient.AccessToken, 
+                new CookieOptions { HttpOnly = false });
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, 
-                new ClaimsPrincipal(claimsIdentity));
-
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
-
-        [HttpGet]
-        public async Task<ActionResult> GoogleSignOut()
+        
+        public ActionResult GoogleSignOut()
         {
-            HttpContext.Session.Clear();
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            Response.Cookies.Delete(AuthorizationToken);
+
             return View("Login");
         }
     }
