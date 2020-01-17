@@ -25,7 +25,8 @@
 *.lib
 *.sbr
 *.sdf
-ipch/ 
+ipch/
+.vs/ 
 *.dbmdl
 *.csproj.user
 *.cache
