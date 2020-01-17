@@ -32,13 +32,12 @@ namespace NewsPortal.Web.Controllers
             _config = config;
         }
 
-        [CustomAuth]
-        public ActionResult Index()
+        public IActionResult Login()
         {
-            return RedirectToPage("/Index");
+            return View("Login");
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<ActionResult> GoogleSignIn()
         {
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
@@ -98,17 +97,17 @@ namespace NewsPortal.Web.Controllers
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme, 
-                new ClaimsPrincipal(claimsIdentity));           
+                new ClaimsPrincipal(claimsIdentity));
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Home");
         }
 
         [HttpGet]
         public async Task<ActionResult> GoogleSignOut()
-        {            
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToPage("/Login");
+        {
+            HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return View("Login");
         }
     }
 }
