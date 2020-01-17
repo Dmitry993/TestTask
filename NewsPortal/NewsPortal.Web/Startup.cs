@@ -50,7 +50,7 @@ namespace NewsPortal.Web
             })        
             .AddCookie(options=>
             {
-                options.LoginPath = "/Login";
+                options.Cookie.Name = "MyCookie";              
             });
           
             _clientID = Configuration["Authentication:Google:ClientId"];
@@ -81,7 +81,7 @@ namespace NewsPortal.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
