@@ -53,7 +53,7 @@ namespace NewsPortal.Web
             });
 
             services.AddDbContext<NewsPortalDbContext>(options =>
-             options.UseSqlServer(Configuration["ConnectionStrings:NewsPortalDbContext"]));
+             options.UseSqlServer(Configuration.GetConnectionString("NewsPortalDbContext")));
 
             services.AddLogging(logging =>
             {
@@ -66,7 +66,7 @@ namespace NewsPortal.Web
         public void ConfigureContainer(ContainerBuilder builder)
         {
             // Register your own things directly with Autofac, like:
-            //builder.RegisterModule();
+            builder.RegisterModule(new AutofacModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
