@@ -4,11 +4,11 @@ using System.Text;
 
 namespace NewsPortal.Data.Repositories
 {
-    interface IRepository<T> : IDisposable
+    public interface IRepository<T> : IDisposable
         where T : class
     {
-        IEnumerable<T> GetAllList();
-        T GetBook(int id);
+        IEnumerable<T> GetAll();
+        T Get(int id);
         void Create(T item);
         void Update(T item);
         void Delete(int id);
