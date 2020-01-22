@@ -3,11 +3,13 @@ using NewsPortal.Data.Context;
 using NewsPortal.Data.Model;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NewsPortal.Data.Repositories
 {
-    public class UserRepository : IRepository<ApplicationUserDb>
+    public class UserRepository : IRepository<User>
     {
+        private bool disposed = false;
         private readonly NewsPortalDbContext _context;        
 
         public UserRepository(NewsPortalDbContext context)
@@ -15,39 +17,37 @@ namespace NewsPortal.Data.Repositories
             _context = context;
         }
 
-        public void Create(ApplicationUserDb item)
+        public void Create(User item)
         {            
-            _context.Users.Add(item);
+           _context.Users.Add(item);            
         }
 
         public void Delete(int id)
         {
-            ApplicationUserDb user = _context.Users.Find(id);
+            User user = _context.Users.Find(id);
             if (user != null)
                 _context.Users.Remove(user);
         }       
 
-        public ApplicationUserDb Get(int id)
+        public User Get(int id)
         {
             return _context.Users.Find(id);
-        }
+        }       
 
-        public IEnumerable<ApplicationUserDb> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return _context.Users;
+            return await _context.Users.ToListAsync();
         }
 
-        public async void Save()
+        public void Save()
         {
-           await _context.SaveChangesAsync();
+           _context.SaveChanges();
         }
 
-        public void Update(ApplicationUserDb item)
+        public void Update(User item)
         {
             _context.Entry(item).State = EntityState.Modified;
         }
-
-        private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {

@@ -2,14 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NewsPortal.Logic.Services
 {
     public interface IUserService
     {
-        IEnumerable<ApplicationUser> GetAllUser();
+        Task<IEnumerable<ApplicationUser>> GetAllUser();
         ApplicationUser Get(int id);
         void CreateUser(ApplicationUser item);
-        bool UserExists(int id);
+        Task<bool> UserExist(string id);
     }
 }

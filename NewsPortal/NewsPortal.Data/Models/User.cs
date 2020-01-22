@@ -4,9 +4,11 @@ using System.Text;
 
 namespace NewsPortal.Data.Model
 {
-    public class ApplicationUserDb   
+    public class User   
     {
         public int Id { get; set; }
+
+        public string GoogleId { get; set; }
 
         public string UserName { get; set; }
 
@@ -14,9 +16,7 @@ namespace NewsPortal.Data.Model
 
         public string LastName { get; set; }
 
-        public string Email { get; set; }
-
-        public string Password { get; set; }
+        public string Email { get; set; }      
 
         public DateTime Created { get; set; } = DateTime.UtcNow;
     }

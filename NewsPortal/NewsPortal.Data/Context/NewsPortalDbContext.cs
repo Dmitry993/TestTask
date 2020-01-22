@@ -10,7 +10,9 @@ namespace NewsPortal.Data.Context
     {
         public NewsPortalDbContext(DbContextOptions<NewsPortalDbContext> options)
             : base(options: options)
-        { }
-        public DbSet<ApplicationUserDb> Users { get; set; }
+        {
+            Database.EnsureCreated();           
+        }
+        public DbSet<User> Users { get; set; }
     }
 }
