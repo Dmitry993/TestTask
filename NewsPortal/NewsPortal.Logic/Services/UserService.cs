@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using NewsPortal.Data.Model;
 using NewsPortal.Data.Repositories;
-using NewsPortal.Logic.Model;
-using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ApplicationUser = NewsPortal.Logic.Model.ApplicationUser;
 
 namespace NewsPortal.Logic.Services
 {
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<ApplicationUserDb> _repository;         
+        private readonly IRepository<User> _repository;         
 
-        public UserService(IMapper mapper, IRepository<ApplicationUserDb> repository)
+        public UserService(IMapper mapper, IRepository<User> repository)
         {
             _repository = repository;
             _mapper = mapper;
@@ -20,26 +21,34 @@ namespace NewsPortal.Logic.Services
 
         public void CreateUser(ApplicationUser item)
         {
-            _repository.Create(_mapper.Map<ApplicationUserDb>(item));
+            var result = _mapper.Map<Data.Model.User>(item);
+            _repository.Create(result);
+            _repository.Save();
         }
 
-        public bool UserExists(int id)
+        public async Task<bool> UserExist(string id)
         {
-            if (_repository.Get(id) == null)
+            var users = await _repository.GetAll();            
+            var mapUsersToList = _mapper.Map<IEnumerable<User>, IEnumerable<ApplicationUser>>(users);
+            var result = mapUsersToList.FirstOrDefault(b => b.GoogleId == id);
+
+            if (result == null)
             {
                 return false;
             }
             return true;
         }
 
-        public ApplicationUser Get(int id)
+        public Model.ApplicationUser Get(int id)
         {
-            return _mapper.Map<ApplicationUser>(_repository.Get(id));
+            var user = _repository.Get(id);
+            return _mapper.Map<Model.ApplicationUser>(user);
         }
 
-        public IEnumerable<ApplicationUser> GetAllUser()
+        public async Task<IEnumerable<ApplicationUser>> GetAllUser()
         {
-            return _mapper.Map<IEnumerable<ApplicationUserDb>, IEnumerable<ApplicationUser>>(_repository.GetAll()); ;
+            var usersList = await _repository.GetAll();
+            return _mapper.Map<IEnumerable<User>, IEnumerable<ApplicationUser>>(usersList);
         }
     }
 }
