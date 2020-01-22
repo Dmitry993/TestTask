@@ -1,43 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OAuth2.Client.Impl;
 using OAuth2.Infrastructure;
-using NewsPortal.Logic.Model;
-using RestSharp;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using NewsPortal.Web.Attributes;
 using OAuth2.Models;
-using Microsoft.AspNetCore.Localization;
+using NewsPortal.Logic.Services;
+using NewsPortal.Logic.Model;
 
 namespace NewsPortal.Web.Controllers
 {
-
     public class AuthController : Controller
     {
         public const string AuthorizationToken = "AuthorizationToken";
 
         private IConfiguration _config;
+        private IUserService _userService;
 
-        public AuthController(IConfiguration config)
-        {
+        public AuthController(IConfiguration config, IUserService userService)
+        {            
             _config = config;
-        }
+            _userService = userService;
+        }        
 
         public IActionResult Login()
         {
             return View("Login");
-        }
-        
+        }        
+       
         public async Task<ActionResult> GoogleSignIn()
         {
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
@@ -80,12 +72,31 @@ namespace NewsPortal.Web.Controllers
                 return RedirectToAction("LoginError", new { error = ex.Message });
             }
 
+            if (userInfo.Id != null && !(await _userService.UserExist(userInfo.Id)))
+            {
+                _userService.CreateUser(CreateNewUser(userInfo));
+            }
+
             HttpContext.Response.Cookies.Append(
                 AuthorizationToken, 
                 googleClient.AccessToken, 
                 new CookieOptions { HttpOnly = false });
 
             return RedirectToAction("Index", "Home");
+        }
+        
+        public ApplicationUser CreateNewUser(UserInfo userInfo)
+        {            
+            string userName = userInfo.Email.Split('@')[0];
+
+            return new ApplicationUser()
+            {
+                GoogleId = userInfo.Id,
+                Email = userInfo.Email.ToString(),
+                UserName = userName,
+                FirstName = userInfo.FirstName,
+                LastName = userInfo.LastName
+            };
         }
         
         public ActionResult GoogleSignOut()
