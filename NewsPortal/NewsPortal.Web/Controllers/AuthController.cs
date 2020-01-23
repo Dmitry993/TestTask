@@ -9,6 +9,7 @@ using OAuth2.Infrastructure;
 using OAuth2.Models;
 using NewsPortal.Logic.Services;
 using NewsPortal.Logic.Model;
+using AutoMapper;
 
 namespace NewsPortal.Web.Controllers
 {
@@ -19,11 +20,13 @@ namespace NewsPortal.Web.Controllers
 
         private IConfiguration _config;
         private IUserService _userService;
+        private IMapper _mapper;
 
-        public AuthController(IConfiguration config, IUserService userService)
+        public AuthController(IConfiguration config, IUserService userService, IMapper mapper)
         {
             _config = config;
             _userService = userService;
+            _mapper = mapper;
         }
 
         public IActionResult Login()
@@ -46,7 +49,6 @@ namespace NewsPortal.Web.Controllers
 
             return Redirect(await googleClient.GetLoginLinkUriAsync());
         }
-
 
         public async Task<ActionResult> GoogleLoginCallBack()
         {
@@ -76,17 +78,9 @@ namespace NewsPortal.Web.Controllers
 
             if (userInfo.Id != null)
             {
-                var findUserId =  await _userService.FindUserByGoogleId(userInfo.Id);
-                
-                if (findUserId == null)
-                {
-                    var id = await _userService.CreateUser(CreateNewUser(userInfo));
-                    userId = id;
-                }
-                else
-                {
-                    userId = findUserId;
-                }
+                var user = _mapper.Map<ApplicationUser>(userInfo);
+                var id = await _userService.GetUserIdAsync(user);
+                userId = id;
             }
 
             HttpContext.Response.Cookies.Append(
@@ -100,20 +94,6 @@ namespace NewsPortal.Web.Controllers
                 new CookieOptions { HttpOnly = false });
 
             return RedirectToAction("Index", "Home");
-        }
-
-        public ApplicationUser CreateNewUser(UserInfo userInfo)
-        {
-            string userName = userInfo.Email.Split('@')[0];
-
-            return new ApplicationUser()
-            {
-                GoogleId = userInfo.Id,
-                Email = userInfo.Email.ToString(),
-                UserName = userName,
-                FirstName = userInfo.FirstName,
-                LastName = userInfo.LastName
-            };
         }
 
         public ActionResult GoogleSignOut()

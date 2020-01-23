@@ -10,7 +10,7 @@ namespace NewsPortal.Web
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<UserRepository>()
-               .As<IRepository<User>>()
+               .As<IUserRepository>()
                .InstancePerLifetimeScope();
 
             builder.RegisterType<UserService>()

@@ -11,7 +11,7 @@ namespace NewsPortal.Logic.Profiles
     {
         public ApplicationUserProfile()
         {
-            CreateMap<ApplicationUser, User>().ReverseMap();
+            CreateMap<ApplicationUser, User>().ReverseMap();            
         }
     }
 }
