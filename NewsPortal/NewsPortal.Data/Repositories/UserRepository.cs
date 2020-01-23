@@ -39,9 +39,9 @@ namespace NewsPortal.Data.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public void Save()
+        public async Task Save()
         {
-           _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
         public void Update(User item)
