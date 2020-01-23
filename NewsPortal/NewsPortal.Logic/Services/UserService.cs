@@ -11,49 +11,51 @@ namespace NewsPortal.Logic.Services
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<User> _repository;         
+        private readonly IUserRepository _repository;         
 
-        public UserService(IMapper mapper, IRepository<User> repository)
+        public UserService(IMapper mapper, IUserRepository repository)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<string> CreateUser(ApplicationUser item)
+        public async Task<string> CreateUserAsync(ApplicationUser item)
         {
             var mapUser = _mapper.Map<Data.Model.User>(item);
-            _repository.Create(mapUser);
-            await _repository.Save();
+            await _repository.CreateAsync(mapUser);
+            await _repository.SaveAsync();
 
-            var users = await _repository.GetAll();
+            var users = await _repository.GetAllAsync();
             var mapUsers = _mapper.Map<IEnumerable<User>, IEnumerable<ApplicationUser>>(users);
             var result = mapUsers.FirstOrDefault(b => b.GoogleId == item.GoogleId);
                        
             return result.Id.ToString();
         }
 
-        public async Task<string> FindUserByGoogleId(string id)
-        {
-            var users = await _repository.GetAll();            
-            var mapUsers = _mapper.Map<IEnumerable<User>, IEnumerable<ApplicationUser>>(users);
-            var result = mapUsers.FirstOrDefault(b => b.GoogleId == id);
+        public async Task<string> GetUserIdAsync(ApplicationUser item)
+        {            
+            var existUser = await _repository.FindUserByGoogleIdAsync(item.GoogleId);
 
-            if (result == null)
+            if (existUser == null)
             {
-                return null;
+                var user = _mapper.Map<User>(item);
+                await _repository.CreateAsync(user);
+                await _repository.SaveAsync();                
+                return user.Id.ToString();
             }
-            return result.Id.ToString();
+
+            return existUser.Id.ToString();
+        }              
+
+        public async Task<ApplicationUser> GetUserAsync(int id)
+        {
+            var user = await _repository.GetAsync(id);
+            return _mapper.Map<ApplicationUser>(user);
         }
 
-        public Model.ApplicationUser GetUser(int id)
+        public async Task<IEnumerable<ApplicationUser>> GetAllUserAsync()
         {
-            var user = _repository.Get(id);
-            return _mapper.Map<Model.ApplicationUser>(user);
-        }
-
-        public async Task<IEnumerable<ApplicationUser>> GetAllUser()
-        {
-            var usersList = await _repository.GetAll();
+            var usersList = await _repository.GetAllAsync();
             return _mapper.Map<IEnumerable<User>, IEnumerable<ApplicationUser>>(usersList);
         }
     }
