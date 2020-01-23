@@ -7,58 +7,65 @@ using System.Threading.Tasks;
 
 namespace NewsPortal.Data.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
-        private bool disposed = false;
-        private readonly NewsPortalDbContext _context;        
+        private bool _disposed = false;
+        private readonly NewsPortalDbContext _context;
 
         public UserRepository(NewsPortalDbContext context)
         {
             _context = context;
         }
 
-        public void Create(User item)
-        {            
-           _context.Users.Add(item);            
+        public async Task<User> FindUserByGoogleIdAsync(string id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(b =>b.GoogleId == id);
+            return user;
         }
 
-        public void Delete(int id)
+        public async Task<User> CreateAsync(User item)
         {
-            User user = _context.Users.Find(id);
+            await _context.Users.AddAsync(item);
+            return item;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            User user = await _context.Users.FindAsync(id);
             if (user != null)
                 _context.Users.Remove(user);
-        }       
+        }
 
-        public User Get(int id)
+        public async Task<User> GetAsync(int id)
         {
-            return _context.Users.Find(id);
-        }       
+            return await _context.Users.FindAsync(id);
+        }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public void Update(User item)
-        {
+        {            
             _context.Entry(item).State = EntityState.Modified;
         }
 
         public virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!this._disposed)
             {
                 if (disposing)
                 {
                     _context.Dispose();
                 }
             }
-            this.disposed = true;
+            this._disposed = true;
         }
 
         public void Dispose()

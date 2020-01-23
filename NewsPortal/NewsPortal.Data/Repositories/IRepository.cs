@@ -8,11 +8,11 @@ namespace NewsPortal.Data.Repositories
     public interface IRepository<T> : IDisposable
         where T : class
     {
-        Task<IEnumerable<T>> GetAll();
-        T Get(int id);        
-        void Create(T item);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetAsync(int id);        
+        Task<T> CreateAsync(T item);
         void Update(T item);
-        void Delete(int id);
-        Task Save();
+        Task DeleteAsync(int id);
+        Task SaveAsync();
     }
 }
