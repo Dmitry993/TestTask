@@ -14,22 +14,23 @@ namespace NewsPortal.Web.Controllers
 {
     public class AuthController : Controller
     {
-        public const string AuthorizationToken = "AuthorizationToken";
+        public const string AUTHORIZATION_TOKEN = "AuthorizationToken";
+        public const string USER_ID = "UserId";
 
         private IConfiguration _config;
         private IUserService _userService;
 
         public AuthController(IConfiguration config, IUserService userService)
-        {            
+        {
             _config = config;
             _userService = userService;
-        }        
+        }
 
         public IActionResult Login()
         {
             return View("Login");
-        }        
-       
+        }
+
         public async Task<ActionResult> GoogleSignIn()
         {
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
@@ -51,6 +52,7 @@ namespace NewsPortal.Web.Controllers
         {
             var code = HttpContext.Request.Query["code"];
             var userInfo = new UserInfo();
+            var userId = "";
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
             var clientSecret = _config.GetSection("Authentication:Google:ClientSecret").Value;
             var redirectUri = new Uri(Url.Action("GoogleLoginCallBack", "Auth", null, "https"));
@@ -72,21 +74,36 @@ namespace NewsPortal.Web.Controllers
                 return RedirectToAction("LoginError", new { error = ex.Message });
             }
 
-            if (userInfo.Id != null && !(await _userService.UserExist(userInfo.Id)))
+            if (userInfo.Id != null)
             {
-                _userService.CreateUser(CreateNewUser(userInfo));
+                var findUserId =  await _userService.FindUserByGoogleId(userInfo.Id);
+                
+                if (findUserId == null)
+                {
+                    var id = await _userService.CreateUser(CreateNewUser(userInfo));
+                    userId = id;
+                }
+                else
+                {
+                    userId = findUserId;
+                }
             }
 
             HttpContext.Response.Cookies.Append(
-                AuthorizationToken, 
-                googleClient.AccessToken, 
+                AUTHORIZATION_TOKEN,
+                googleClient.AccessToken,
+                new CookieOptions { HttpOnly = false });
+
+            HttpContext.Response.Cookies.Append(
+                USER_ID,
+                userId,
                 new CookieOptions { HttpOnly = false });
 
             return RedirectToAction("Index", "Home");
         }
-        
+
         public ApplicationUser CreateNewUser(UserInfo userInfo)
-        {            
+        {
             string userName = userInfo.Email.Split('@')[0];
 
             return new ApplicationUser()
@@ -98,11 +115,12 @@ namespace NewsPortal.Web.Controllers
                 LastName = userInfo.LastName
             };
         }
-        
+
         public ActionResult GoogleSignOut()
         {
 
-            Response.Cookies.Delete(AuthorizationToken);
+            Response.Cookies.Delete(AUTHORIZATION_TOKEN);
+            Response.Cookies.Delete(USER_ID);
 
             return View("Login");
         }
