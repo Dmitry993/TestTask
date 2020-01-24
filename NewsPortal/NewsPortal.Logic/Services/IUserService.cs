@@ -8,9 +8,9 @@ namespace NewsPortal.Logic.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<ApplicationUser>> GetAllUserAsync();
+        Task<IEnumerable<ApplicationUser>> GetAllUsersAsync();
         Task<ApplicationUser> GetUserAsync(int id);
-        Task<string> CreateUserAsync(ApplicationUser item);
-        Task<string> GetUserIdAsync(ApplicationUser item);       
+        Task<int> CreateUserAsync(ApplicationUser item);
+        Task<int> GetOrCreateUserAsync(ApplicationUser item);       
     }
 }
