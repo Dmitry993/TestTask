@@ -18,15 +18,15 @@ namespace NewsPortal.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<int> CreateUserAsync(ApplicationUser applicationUser)
+        public async Task<ApplicationUser> CreateUserAsync(ApplicationUser applicationUser)
         {
             var user = _mapper.Map<User>(applicationUser);
             await _repository.CreateAsync(user);
             await _repository.SaveAsync();
-            return user.Id;
+            return _mapper.Map<ApplicationUser>(user);
         }
 
-        public async Task<int> GetOrCreateUserAsync(ApplicationUser applicationUser)
+        public async Task<ApplicationUser> GetOrCreateUserAsync(ApplicationUser applicationUser)
         {            
             var user = await _repository.FindUserByGoogleIdAsync(applicationUser.GoogleId);
 
@@ -35,7 +35,7 @@ namespace NewsPortal.Logic.Services
                 return await CreateUserAsync(applicationUser);             
             }
                         
-            return user.Id;
+            return _mapper.Map<ApplicationUser>(user);
         }              
 
         public async Task<ApplicationUser> GetUserAsync(int id)

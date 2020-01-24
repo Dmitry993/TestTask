@@ -8,7 +8,7 @@ namespace NewsPortal.Logic.Services
     {
         Task<IEnumerable<ApplicationUser>> GetAllUsersAsync();
         Task<ApplicationUser> GetUserAsync(int id);
-        Task<int> CreateUserAsync(ApplicationUser item);
-        Task<int> GetOrCreateUserAsync(ApplicationUser item);       
+        Task<ApplicationUser> CreateUserAsync(ApplicationUser item);
+        Task<ApplicationUser> GetOrCreateUserAsync(ApplicationUser item);       
     }
 }
