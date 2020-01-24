@@ -4,7 +4,7 @@ using NewsPortal.Data.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApplicationUser = NewsPortal.Logic.Model.ApplicationUser;
+using NewsPortal.Logic.Model;
 
 namespace NewsPortal.Logic.Services
 {
