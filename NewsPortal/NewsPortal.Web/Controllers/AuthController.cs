@@ -1,43 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OAuth2.Client.Impl;
 using OAuth2.Infrastructure;
-using NewsPortal.Logic.Model;
-using RestSharp;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using NewsPortal.Web.Attributes;
 using OAuth2.Models;
-using Microsoft.AspNetCore.Localization;
+using NewsPortal.Logic.Services;
+using NewsPortal.Logic.Model;
+using AutoMapper;
 
 namespace NewsPortal.Web.Controllers
 {
-
     public class AuthController : Controller
     {
-        public const string AuthorizationToken = "AuthorizationToken";
+        public const string AUTHORIZATION_TOKEN = "AuthorizationToken";
+        public const string USER_ID = "UserId";
 
         private IConfiguration _config;
+        private IUserService _userService;
+        private IMapper _mapper;
 
-        public AuthController(IConfiguration config)
+        public AuthController(IConfiguration config, IUserService userService, IMapper mapper)
         {
             _config = config;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         public IActionResult Login()
         {
             return View("Login");
         }
-        
+
         public async Task<ActionResult> GoogleSignIn()
         {
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
@@ -54,11 +50,11 @@ namespace NewsPortal.Web.Controllers
             return Redirect(await googleClient.GetLoginLinkUriAsync());
         }
 
-
         public async Task<ActionResult> GoogleLoginCallBack()
         {
             var code = HttpContext.Request.Query["code"];
             var userInfo = new UserInfo();
+            var userId = "";
             var clientID = _config.GetSection("Authentication:Google:ClientId").Value;
             var clientSecret = _config.GetSection("Authentication:Google:ClientSecret").Value;
             var redirectUri = new Uri(Url.Action("GoogleLoginCallBack", "Auth", null, "https"));
@@ -80,18 +76,31 @@ namespace NewsPortal.Web.Controllers
                 return RedirectToAction("LoginError", new { error = ex.Message });
             }
 
+            if (userInfo.Id != null)
+            {
+                var newUser = _mapper.Map<ApplicationUser>(userInfo);
+                var user = await _userService.GetOrCreateUserAsync(newUser);
+                userId = user.Id.ToString();
+            }
+
             HttpContext.Response.Cookies.Append(
-                AuthorizationToken, 
-                googleClient.AccessToken, 
+                AUTHORIZATION_TOKEN,
+                googleClient.AccessToken,
+                new CookieOptions { HttpOnly = false });
+
+            HttpContext.Response.Cookies.Append(
+                USER_ID,
+                userId,
                 new CookieOptions { HttpOnly = false });
 
             return RedirectToAction("Index", "Home");
         }
-        
+
         public ActionResult GoogleSignOut()
         {
 
-            Response.Cookies.Delete(AuthorizationToken);
+            Response.Cookies.Delete(AUTHORIZATION_TOKEN);
+            Response.Cookies.Delete(USER_ID);
 
             return View("Login");
         }

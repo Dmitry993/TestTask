@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NewsPortal.Logic.Model
+namespace NewsPortal.Data.Model
 {
-    public class ApplicationUser   
+    public class User   
     {
         public int Id { get; set; }
 
@@ -16,6 +16,8 @@ namespace NewsPortal.Logic.Model
 
         public string LastName { get; set; }
 
-        public string Email { get; set; }       
+        public string Email { get; set; }      
+
+        public DateTime Created { get; set; } = DateTime.UtcNow;
     }
 }
