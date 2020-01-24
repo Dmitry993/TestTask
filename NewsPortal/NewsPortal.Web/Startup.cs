@@ -42,18 +42,7 @@ namespace NewsPortal.Web
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
-            });
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options =>
-            {
-                options.Cookie.Name = "AuthorizationToken";
-            });
+            });                     
 
             services.AddDbContext<NewsPortalDbContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("NewsPortalDbContext")));
