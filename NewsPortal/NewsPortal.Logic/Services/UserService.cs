@@ -2,10 +2,8 @@
 using NewsPortal.Data.Model;
 using NewsPortal.Data.Repositories;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using NewsPortal.Logic.Model;
-using System.Threading;
 
 namespace NewsPortal.Logic.Services
 {

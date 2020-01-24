@@ -19,7 +19,7 @@ namespace NewsPortal.Data.Repositories
 
         public async Task<User> FindUserByGoogleIdAsync(string id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(b =>b.GoogleId == id);
+            var user = await _context.Users.FirstOrDefaultAsync(b => b.GoogleId == id);
             return user;
         }
 
@@ -52,7 +52,7 @@ namespace NewsPortal.Data.Repositories
         }
 
         public void Update(User item)
-        {            
+        {
             _context.Entry(item).State = EntityState.Modified;
         }
 

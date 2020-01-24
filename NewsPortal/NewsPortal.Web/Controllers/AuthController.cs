@@ -79,8 +79,8 @@ namespace NewsPortal.Web.Controllers
             if (userInfo.Id != null)
             {
                 var user = _mapper.Map<ApplicationUser>(userInfo);
-                var id = await _userService.GetUserIdAsync(user);
-                userId = id;
+                var id = await _userService.GetOrCreateUserAsync(user);
+                userId = id.ToString();
             }
 
             HttpContext.Response.Cookies.Append(
