@@ -1,0 +1,24 @@
+﻿@model NewsPortal.Logic.Model.ApplicationUser
+
+@{
+    ViewBag.Title = "Personal Page";
+    Layout = "_Layout";
+}
+
+<div class="row">  
+    <div class="col-md-12">
+
+        @(Html.ActionLink("Go back", "Index", "Home"));
+
+    </div>
+
+</div>
+<div>
+    <ul class="two-columns clearfix">
+        <li>ID: @(Model.Id)</li>            
+        <li>User name: @(Model.UserName)</li>            
+        <li>First name: @(Model.FirstName)</li>            
+        <li>Last name: @(Model.LastName)</li>            
+        <li>Email: @(Model.Email)</li>            
+    </ul>
+</div>
