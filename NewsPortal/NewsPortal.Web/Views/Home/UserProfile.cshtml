@@ -5,20 +5,35 @@
     Layout = "_Layout";
 }
 
-<div class="row">  
+<div class="row">
+    <div>
+        @(Html.ActionLink("Create publication", "CreatePost", "Post"));
+    </div>
+
     <div class="col-md-12">
-
         @(Html.ActionLink("Go back", "Index", "Home"));
-
     </div>
 
 </div>
 <div>
-    <ul class="two-columns clearfix">
-        <li>ID: @(Model.Id)</li>            
-        <li>User name: @(Model.UserName)</li>            
-        <li>First name: @(Model.FirstName)</li>            
-        <li>Last name: @(Model.LastName)</li>            
-        <li>Email: @(Model.Email)</li>            
+    <ul>
+        <li>ID: @(Model.Id)</li>
+        <li>User name: @(Model.UserName)</li>
+        <li>First name: @(Model.FirstName)</li>
+        <li>Last name: @(Model.LastName)</li>
+        <li>Email: @(Model.Email)</li>
     </ul>
+</div>
+<div>
+    <h4>User posts:</h4>
+
+    @foreach (var item in Model.Posts)
+    {
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-group">
+                <h4>@Html.ActionLink(item.Name, "Post", "Post", item)</h4>
+            </div>
+        </div>
+    }
 </div>
