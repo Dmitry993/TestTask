@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NewsPortal.Data.Context;
+using NewsPortal.Logic.MapperProfiles;
 using NewsPortal.Logic.Profiles;
 using NewsPortal.Web.Profiles;
 
@@ -35,10 +36,11 @@ namespace NewsPortal.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();                      
+            services.AddOptions();
             services.AddAutoMapper(
-                typeof(ApplicationUserProfile).Assembly, 
-                typeof(UserProfile).Assembly);            
+                typeof(ApplicationUserProfile).Assembly,
+                typeof(UserProfile).Assembly, 
+                typeof(UserPostProfile).Assembly);            
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
