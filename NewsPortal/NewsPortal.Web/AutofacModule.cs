@@ -16,6 +16,14 @@ namespace NewsPortal.Web
             builder.RegisterType<UserService>()
                 .As<IUserService>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<PostRepository>()
+               .As<IPostRepository>()
+               .InstancePerLifetimeScope();
+
+            builder.RegisterType<PostService>()
+                .As<IPostService>()
+                .InstancePerLifetimeScope();
         }
     }
 }
