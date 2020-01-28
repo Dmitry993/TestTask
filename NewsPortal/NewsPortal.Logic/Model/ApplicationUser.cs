@@ -16,6 +16,8 @@ namespace NewsPortal.Logic.Model
 
         public string LastName { get; set; }
 
-        public string Email { get; set; }       
+        public string Email { get; set; }
+
+        public IEnumerable<UserPost> Posts { get; set; }
     }
 }
