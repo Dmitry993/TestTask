@@ -9,7 +9,7 @@ namespace NewsPortal.Web.Controllers
     [CustomAuthorize]
     public class HomeController : Controller
     {              
-        private IUserService _userService;        
+        private IUserService _userService;
        
         public HomeController(IUserService userService)
         {          
