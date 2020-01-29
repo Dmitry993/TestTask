@@ -6,7 +6,8 @@
 
 @using (Html.BeginForm("Create", "Post", FormMethod.Post)) 
 { 
-    <div class="form-horizontal">       
+    <div class="form-horizontal">
+        <h1>@ViewBag.Title</h1>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -24,14 +25,13 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-       
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-success" />
+                @Html.ActionLink("Cancel", "GetUser", "Home", null, new { @class = "btn btn-secondary" })
             </div>
         </div>
     </div>
 }
-<div>
-    @Html.ActionLink("Go back", "Index", "Home")
-</div>
+

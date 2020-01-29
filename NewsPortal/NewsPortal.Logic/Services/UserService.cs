@@ -21,7 +21,7 @@ namespace NewsPortal.Logic.Services
         public async Task<ApplicationUser> CreateUserAsync(ApplicationUser applicationUser)
         {
             var user = _mapper.Map<User>(applicationUser);
-            await _repository.CreateAsync(user);
+            await _repository.CreateAsync(user);           
             await _repository.SaveAsync();
             return _mapper.Map<ApplicationUser>(user);
         }

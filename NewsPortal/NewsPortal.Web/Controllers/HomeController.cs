@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NewsPortal.Logic.Services;
@@ -11,7 +9,7 @@ namespace NewsPortal.Web.Controllers
     [CustomAuthorize]
     public class HomeController : Controller
     {              
-        private IUserService _userService;
+        private IUserService _userService;        
        
         public HomeController(IUserService userService)
         {          
@@ -19,7 +17,7 @@ namespace NewsPortal.Web.Controllers
         }
 
         public IActionResult Index()
-        {
+        {           
             return View();
         }
 
