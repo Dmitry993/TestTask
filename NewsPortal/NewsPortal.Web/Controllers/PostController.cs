@@ -19,7 +19,7 @@ namespace NewsPortal.Web.Controllers
             _postService = postService;
         }
 
-        public IActionResult Post(UserPost userPost)
+        public IActionResult GetPost(UserPost userPost)
         {
             return View("Post", userPost);
         }
@@ -29,7 +29,8 @@ namespace NewsPortal.Web.Controllers
             return View("Create");
         }        
 
-        public async Task<IActionResult> Create(UserPost userPost)
+        [HttpPost]
+        public async Task<IActionResult> CreatePost(UserPost userPost)
         {
             var stringId = HttpContext.Request.Cookies["UserId"];
             var id = Int32.Parse(stringId);

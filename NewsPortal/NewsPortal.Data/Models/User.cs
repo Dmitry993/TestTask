@@ -21,6 +21,6 @@ namespace NewsPortal.Data.Model
 
         public IEnumerable<Post> Posts { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime Created { get; set; }
     }
 }

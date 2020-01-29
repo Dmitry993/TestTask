@@ -22,11 +22,9 @@ namespace NewsPortal.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Post>().ToTable("Posts");
-
-            var userEntity = modelBuilder.Entity<User>();
-            userEntity.HasMany(u => u.Posts)
-                .WithOne(p => p.Author);           
+            modelBuilder.Entity<User>()
+                .HasMany(user => user.Posts)
+                .WithOne(post => post.Author);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace NewsPortal.Data.Repositories
 
         public async Task<User> FindUserByGoogleIdAsync(string id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(b => b.GoogleId == id);
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.GoogleId == id);
             return user;
         }
 
@@ -38,9 +38,14 @@ namespace NewsPortal.Data.Repositories
         }
 
         public async Task<User> GetAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);               
+        }
+
+        public async Task<User> GetUserWithPostsAsync(int id)
         {            
             return await _context.Users.Include(b => b.Posts)
-                .Where(b => b.Id == id).FirstOrDefaultAsync();
+                .Where(user => user.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()

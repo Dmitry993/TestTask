@@ -22,6 +22,7 @@ namespace NewsPortal.Logic.Services
         public async Task<UserPost> CreatePostAsync(UserPost userPost)
         {
             var post = _mapper.Map<Post>(userPost);
+            post.Created = DateTime.UtcNow;
             await _repository.CreateAsync(post);           
             await _repository.SaveAsync();
             return _mapper.Map<UserPost>(post);
