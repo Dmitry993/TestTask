@@ -26,8 +26,7 @@ namespace NewsPortal.Web.Views.Components
             {
                 posts = (List<UserPost>) await _postService.GetAllPostsAsync();
             }
-
-            if (id != 0)
+            else
             {
                 posts = (List<UserPost>) await _postService.GetUserPostsAsync(id);               
             }
