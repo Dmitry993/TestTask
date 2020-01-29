@@ -44,7 +44,7 @@ namespace NewsPortal.Data.Repositories
 
         public async Task<IEnumerable<Post>> FindPostsByUserId(int id)
         {
-            var allPosts = await _context.Posts.ToListAsync();            
+            var allPosts = await _context.Posts.Where(post => post.AuthorId == id).ToListAsync();            
             return allPosts;
         }
 

@@ -26,7 +26,13 @@ namespace NewsPortal.Logic.Services
             await _repository.CreateAsync(post);           
             await _repository.SaveAsync();
             return _mapper.Map<UserPost>(post);
-        }       
+        }
+
+        public async Task<IEnumerable<UserPost>> GetUserPostsAsync(int id)
+        {
+            var post = await _repository.FindPostsByUserId(id);
+            return _mapper.Map <IEnumerable<UserPost>>(post);
+        }
 
         public async Task<IEnumerable<UserPost>> GetAllPostsAsync()
         {
