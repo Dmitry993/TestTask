@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NewsPortal.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,8 +17,10 @@ namespace NewsPortal.Data.Model
 
         public string LastName { get; set; }
 
-        public string Email { get; set; }      
+        public string Email { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public IEnumerable<Post> Posts { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }

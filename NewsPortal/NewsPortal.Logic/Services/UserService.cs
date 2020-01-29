@@ -4,6 +4,7 @@ using NewsPortal.Data.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NewsPortal.Logic.Model;
+using System;
 
 namespace NewsPortal.Logic.Services
 {
@@ -21,7 +22,8 @@ namespace NewsPortal.Logic.Services
         public async Task<ApplicationUser> CreateUserAsync(ApplicationUser applicationUser)
         {
             var user = _mapper.Map<User>(applicationUser);
-            await _repository.CreateAsync(user);
+            user.Created = DateTime.UtcNow;
+            await _repository.CreateAsync(user);           
             await _repository.SaveAsync();
             return _mapper.Map<ApplicationUser>(user);
         }
@@ -36,7 +38,13 @@ namespace NewsPortal.Logic.Services
             }
                         
             return _mapper.Map<ApplicationUser>(user);
-        }              
+        }
+
+        public async Task<ApplicationUser> GetUserWithPostsAsync(int id)
+        {
+            var user = await _repository.GetUserWithPostsAsync(id);
+            return _mapper.Map<ApplicationUser>(user);
+        }
 
         public async Task<ApplicationUser> GetUserAsync(int id)
         {

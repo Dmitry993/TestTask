@@ -1,56 +1,51 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NewsPortal.Data.Context;
-using NewsPortal.Data.Model;
+using NewsPortal.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace NewsPortal.Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class PostRepository : IPostRepository
     {
         private bool _disposed = false;
         private readonly NewsPortalDbContext _context;
 
-        public UserRepository(NewsPortalDbContext context)
+        public PostRepository(NewsPortalDbContext context)
         {
             _context = context;
         }
 
-        public async Task<User> FindUserByGoogleIdAsync(string id)
+        public async Task<Post> CreateAsync(Post item)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.GoogleId == id);
-            return user;
-        }
-
-        public async Task<User> CreateAsync(User item)
-        {
-            await _context.Users.AddAsync(item);
+            await _context.Posts.AddAsync(item);
             return item;
         }
 
         public async Task DeleteAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-                _context.Users.Remove(user);
-        }
+            var post = await _context.Posts.FindAsync(id);
+            if (post != null)
+                _context.Posts.Remove(post);
+        }       
 
-        public async Task<User> GetAsync(int id)
+        public async Task<IEnumerable<Post>> GetAllAsync()
         {
-            return await _context.Users.FindAsync(id);               
+            return await _context.Posts.ToListAsync();
         }
 
-        public async Task<User> GetUserWithPostsAsync(int id)
-        {            
-            return await _context.Users.Include(b => b.Posts)
-                .Where(user => user.Id == id).FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<Post> GetAsync(int id)
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Posts.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Post>> FindPostsByUserId(int id)
+        {
+            var allPosts = await _context.Posts.Where(post => post.AuthorId == id).ToListAsync();            
+            return allPosts;
         }
 
         public async Task SaveAsync()
@@ -58,7 +53,7 @@ namespace NewsPortal.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public void Update(User item)
+        public void Update(Post item)
         {
             _context.Entry(item).State = EntityState.Modified;
         }

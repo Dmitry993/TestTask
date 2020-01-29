@@ -5,20 +5,27 @@
     Layout = "_Layout";
 }
 
-<div class="row">  
-    <div class="col-md-12">
+<div class="row">
+    <div>
+        <h1>@ViewBag.Title</h1>
 
-        @(Html.ActionLink("Go back", "Index", "Home"));
-
-    </div>
-
+        @(Html.ActionLink("Create publication", "CreatePost", "Post", null, new { @class = "btn btn-success" }))
+        @(Html.ActionLink("Go back", "Index", "Home", null, new { @class = "btn btn-primary" }))
+        
+    </div >
 </div>
 <div>
-    <ul class="two-columns clearfix">
-        <li>ID: @(Model.Id)</li>            
-        <li>User name: @(Model.UserName)</li>            
-        <li>First name: @(Model.FirstName)</li>            
-        <li>Last name: @(Model.LastName)</li>            
-        <li>Email: @(Model.Email)</li>            
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">ID: @(Model.Id)</li>
+        <li class="list-group-item">User name: @(Model.UserName)</li>
+        <li class="list-group-item">First name: @(Model.FirstName)</li>
+        <li class="list-group-item">Last name: @(Model.LastName)</li>
+        <li class="list-group-item">Email: @(Model.Email)</li>
     </ul>
+</div>
+<div>
+    <h5>User posts:</h5>
+    <div>
+        @await Component.InvokeAsync("PostList",  new { id = Model.Id})
+    </div>
 </div>
