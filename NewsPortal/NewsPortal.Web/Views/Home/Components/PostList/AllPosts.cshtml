@@ -1,0 +1,18 @@
+﻿@model IEnumerable<NewsPortal.Logic.Model.UserPost>
+@{   
+    Layout = "_Layout";
+}
+
+<div>
+    <h5>Recently posts:</h5>
+
+    @foreach (var item in Model)
+    {
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-group">
+                <h4>@Html.ActionLink(item.Name, "Post", "Post", item)</h4>
+            </div>
+        </div>
+    }
+</div>
