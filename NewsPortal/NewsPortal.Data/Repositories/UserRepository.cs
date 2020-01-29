@@ -3,6 +3,7 @@ using NewsPortal.Data.Context;
 using NewsPortal.Data.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NewsPortal.Data.Repositories
@@ -31,14 +32,15 @@ namespace NewsPortal.Data.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            User user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user != null)
                 _context.Users.Remove(user);
         }
 
         public async Task<User> GetAsync(int id)
-        {
-            return await _context.Users.FindAsync(id);
+        {            
+            return await _context.Users.Include(b => b.Posts)
+                .Where(b => b.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
