@@ -25,14 +25,7 @@
 </div>
 <div>
     <h5>User posts:</h5>
-
-    @foreach (var item in Model.Posts)
-    {
-        <div class="form-horizontal">
-            <hr />
-            <div class="form-group">
-                <h4>@Html.ActionLink(item.Name, "Post", "Post", item)</h4>
-            </div>
-        </div>
-    }
+    <div>
+        @await Component.InvokeAsync("PostList",  new { id = Model.Id})
+    </div>
 </div>
