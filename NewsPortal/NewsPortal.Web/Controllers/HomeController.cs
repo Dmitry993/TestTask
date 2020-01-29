@@ -13,11 +13,11 @@ namespace NewsPortal.Web.Controllers
        
         public HomeController(IUserService userService)
         {          
-            _userService = userService;          
+            _userService = userService;
         }
 
         public IActionResult Index()
-        {           
+        {
             return View();
         }
 

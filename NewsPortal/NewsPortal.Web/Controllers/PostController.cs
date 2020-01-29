@@ -27,7 +27,7 @@ namespace NewsPortal.Web.Controllers
         public IActionResult CreatePost()
         {
             return View("Create");
-        }        
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreatePost(UserPost userPost)
@@ -36,13 +36,13 @@ namespace NewsPortal.Web.Controllers
             var id = Int32.Parse(stringId);
 
             userPost.AuthorId = id;
-            await _postService.CreatePostAsync(userPost);
+            var post = await _postService.CreatePostAsync(userPost);
 
             if (userPost == null)
             {
                 return BadRequest();
             }
-            return RedirectToAction("Index", "Home");
-        }        
+            return View("Post", post);
+        }
     }
 }
