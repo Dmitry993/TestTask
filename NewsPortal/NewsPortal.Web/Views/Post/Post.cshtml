@@ -21,6 +21,6 @@
             @(Html.ActionLink("Edit Post", "EditPost", "Post", Model, new { @class = "btn btn-success" }))
         }
 
-        <input type="button" class = "btn btn-primary" onclick="history.go(-1)" value="Go back" />
+        @(Html.ActionLink("Go Home", "Index", "Home", null, new { @class = "btn btn-primary" }))
     </div>
 </div>
