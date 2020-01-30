@@ -23,7 +23,7 @@ namespace NewsPortal.Web.Controllers
         {
             return View("Post", userPost);
         }
-        
+
         public IActionResult CreatePost()
         {
             return View("Create");
@@ -42,6 +42,18 @@ namespace NewsPortal.Web.Controllers
             {
                 return BadRequest();
             }
+            return View("Post", post);
+        }
+
+        public IActionResult EditPost(UserPost userPost)
+        {
+            return View("Edit", userPost);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePost(UserPost userPost)
+        {
+            var post = await _postService.UpdatePost(userPost);
             return View("Post", post);
         }
     }
