@@ -47,7 +47,7 @@ namespace NewsPortal.Web.Controllers
 
         public IActionResult EditPost(UserPost userPost)
         {
-            if (UserIsValid(userPost))
+            if (UserIsOwner(userPost))
             {
                 return View("Edit", userPost);
             }
@@ -58,7 +58,7 @@ namespace NewsPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePost(UserPost userPost)
         {
-            if (UserIsValid(userPost))
+            if (UserIsOwner(userPost))
             {
                 var post = await _postService.UpdatePostAsync(userPost);
                 return View("Post", post);
@@ -67,17 +67,12 @@ namespace NewsPortal.Web.Controllers
             return Forbid();
         }
 
-        private bool UserIsValid(UserPost userPost)
+        private bool UserIsOwner(UserPost userPost)
         {
             var stringId = HttpContext.Request.Cookies["UserId"];
             var id = Int32.Parse(stringId);
 
-            if (userPost.AuthorId == id)
-            {
-                return true;
-            }
-
-            return false;
+            return userPost.AuthorId == i;
         }
     }
 }
