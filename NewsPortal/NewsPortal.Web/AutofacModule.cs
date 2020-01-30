@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Http;
 using NewsPortal.Data.Model;
 using NewsPortal.Data.Repositories;
 using NewsPortal.Logic.Services;
@@ -23,6 +24,10 @@ namespace NewsPortal.Web
 
             builder.RegisterType<PostService>()
                 .As<IPostService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<HttpContextAccessor>()
+                .As<IHttpContextAccessor>()
                 .InstancePerLifetimeScope();
         }
     }
