@@ -12,7 +12,7 @@ namespace NewsPortal.Web.Controllers
         private IUserService _userService;
        
         public HomeController(IUserService userService)
-        {          
+        {
             _userService = userService;
         }
 
