@@ -53,7 +53,7 @@ namespace NewsPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePost(UserPost userPost)
         {
-            var post = await _postService.UpdatePost(userPost);
+            var post = await _postService.UpdatePostAsync(userPost);
             return View("Post", post);
         }
     }
