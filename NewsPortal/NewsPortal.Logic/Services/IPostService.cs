@@ -12,6 +12,8 @@ namespace NewsPortal.Logic.Services
 
         Task<IEnumerable<UserPost>> GetUserPostsAsync(int id);
 
-        Task<UserPost> CreatePostAsync(UserPost userPost);       
+        Task<UserPost> CreatePostAsync(UserPost userPost);
+
+        Task<UserPost> UpdatePostAsync(UserPost userPost);
     }
 }

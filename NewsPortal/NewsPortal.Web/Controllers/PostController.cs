@@ -23,7 +23,7 @@ namespace NewsPortal.Web.Controllers
         {
             return View("Post", userPost);
         }
-        
+
         public IActionResult CreatePost()
         {
             return View("Create");
@@ -43,6 +43,36 @@ namespace NewsPortal.Web.Controllers
                 return BadRequest();
             }
             return View("Post", post);
+        }
+
+        public IActionResult EditPost(UserPost userPost)
+        {
+            if (UserIsOwner(userPost))
+            {
+                return View("Edit", userPost);
+            }
+
+            return Forbid();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePost(UserPost userPost)
+        {
+            if (UserIsOwner(userPost))
+            {
+                var post = await _postService.UpdatePostAsync(userPost);
+                return View("Post", post);
+            }
+
+            return Forbid();
+        }
+
+        private bool UserIsOwner(UserPost userPost)
+        {
+            var stringId = HttpContext.Request.Cookies["UserId"];
+            var id = Int32.Parse(stringId);
+
+            return userPost.AuthorId == i;
         }
     }
 }
