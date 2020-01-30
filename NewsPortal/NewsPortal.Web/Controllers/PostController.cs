@@ -72,7 +72,7 @@ namespace NewsPortal.Web.Controllers
             var stringId = HttpContext.Request.Cookies["UserId"];
             var id = Int32.Parse(stringId);
 
-            return userPost.AuthorId == i;
+            return userPost.AuthorId == id;
         }
     }
 }
