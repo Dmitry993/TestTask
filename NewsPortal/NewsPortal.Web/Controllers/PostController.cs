@@ -47,30 +47,37 @@ namespace NewsPortal.Web.Controllers
 
         public IActionResult EditPost(UserPost userPost)
         {
-            var stringId = HttpContext.Request.Cookies["UserId"];
-            var id = Int32.Parse(stringId);
-
-            if (userPost.AuthorId == id)
+            if (UserIsValid(userPost))
             {
                 return View("Edit", userPost);
             }
 
-            return View("Post", userPost);
+            return Forbid();
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdatePost(UserPost userPost)
+        {
+            if (UserIsValid(userPost))
+            {
+                var post = await _postService.UpdatePostAsync(userPost);
+                return View("Post", post);
+            }
+
+            return Forbid();
+        }
+
+        private bool UserIsValid(UserPost userPost)
         {
             var stringId = HttpContext.Request.Cookies["UserId"];
             var id = Int32.Parse(stringId);
 
             if (userPost.AuthorId == id)
             {
-                var post = await _postService.UpdatePostAsync(userPost);
-                return View("Post", post);
+                return true;
             }
 
-            return View("Post", userPost);
+            return false;
         }
     }
 }
