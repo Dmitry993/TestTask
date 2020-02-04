@@ -6,13 +6,9 @@
 <div class="row">
     <div>
         <h1>@ViewBag.Title</h1>
-
-        @(Html.ActionLink("Sign Out", "GoogleSignOut", "Auth", null, new { @class = "btn btn-primary" }))
-        @(Html.ActionLink("User profile", "GetUser", "Home", null, new { @class = "btn btn-info" }))
-        <hr />
     </div>
 </div>
 <div>
     <h5>Recently posts:</h5>
-    @await Component.InvokeAsync("PostList")
+    @await Component.InvokeAsync("PostList", new {pageName = "Home"})
 </div>
