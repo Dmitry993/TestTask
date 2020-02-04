@@ -1,0 +1,29 @@
+﻿@model IEnumerable<NewsPortal.Logic.Model.UserComment>
+
+@{
+}
+
+<b>Comments:</b>
+<div class="container">
+    @foreach (var comment in Model)
+    {
+        <div class="border">
+                <b> @comment.UserName</b>
+                <p>@comment.Description</p>
+            </div>
+        <div style="margin-left: 100px;">
+            <b> Replies:</b>
+
+            @foreach(var reply in comment.Reply)
+            {
+                <div class="border">
+                    <b> @reply.UserName</b>
+                    <p>@reply.Description</p>
+                </div>
+            }
+
+            @await Component.InvokeAsync("ReplyToComment", new { commentId = comment.Id, userName = comment.UserName })
+
+        </div>
+    }
+</div> 
