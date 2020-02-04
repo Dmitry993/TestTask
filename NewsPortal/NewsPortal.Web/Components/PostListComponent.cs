@@ -18,9 +18,10 @@ namespace NewsPortal.Web.Views.Components
             _postService = postService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int id)
+        public async Task<IViewComponentResult> InvokeAsync(int id, string pageName)
         {
             var posts = new List<UserPost>();
+            ViewData["name"] = pageName;
 
             if (id == 0)
             {
