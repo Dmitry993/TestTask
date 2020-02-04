@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NewsPortal.Logic.Model
 {
-    public class ApplicationUser   
+    public class ApplicationUser
     {
         public int Id { get; set; }
 

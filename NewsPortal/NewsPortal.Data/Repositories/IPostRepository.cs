@@ -9,5 +9,6 @@ namespace NewsPortal.Data.Repositories
     public interface IPostRepository : IRepository<Post>
     {
         Task<IEnumerable<Post>> FindPostsByUserId(int id);
+
     }
 }

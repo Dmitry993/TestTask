@@ -1,5 +1,6 @@
 ﻿using NewsPortal.Data.Model;
 using System;
+using System.Collections.Generic;
 
 namespace NewsPortal.Data.Models
 {
@@ -13,7 +14,7 @@ namespace NewsPortal.Data.Models
 
         public string Name { get; set; }
 
-        public string Description { get; set; }        
+        public string Description { get; set; }
 
         public DateTime Created { get; set; }
     }

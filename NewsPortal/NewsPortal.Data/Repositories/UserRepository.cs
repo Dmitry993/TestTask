@@ -44,7 +44,7 @@ namespace NewsPortal.Data.Repositories
 
         public async Task<User> GetUserWithPostsAsync(int id)
         {            
-            return await _context.Users.Include(b => b.Posts)
+            return await _context.Users.Include(user => user.Posts)
                 .Where(user => user.Id == id).FirstOrDefaultAsync();
         }
 
