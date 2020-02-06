@@ -1,0 +1,29 @@
+﻿@model IEnumerable<NewsPortal.Logic.Model.UserComment>
+@{
+}
+
+<div>
+    <b style="margin-left: 20px">Replies:</b>
+
+    @for (int i = 1; i <= Model.Count(); i++)
+    {
+        <div style="margin-left: @(20 * i + "px")">
+            <div class="border">
+                <b> @Model.ElementAtOrDefault(i - 1).UserName</b>
+                <p>@Model.ElementAtOrDefault(i - 1).Description</p>
+            </div>
+
+            @if (Model.Count() == i)
+            {
+                @await Component.InvokeAsync("AddComment", new
+                {
+                    commentId = @Model.ElementAtOrDefault(i - 1).ParentId,
+                    postId = @Model.ElementAtOrDefault(i - 1).PostId
+                })
+            }
+
+        </div>
+    }
+
+</div>
+
