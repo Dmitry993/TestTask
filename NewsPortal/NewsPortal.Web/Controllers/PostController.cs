@@ -19,6 +19,13 @@ namespace NewsPortal.Web.Controllers
             _postService = postService;
         }
 
+        public async Task<IActionResult> GetPostById(int id)
+        {
+            var post = await _postService.GetPostAsync(id);
+
+            return View("Post", post);
+        }
+
         public IActionResult GetPost(UserPost userPost)
         {
             return View("Post", userPost);
@@ -35,13 +42,14 @@ namespace NewsPortal.Web.Controllers
             var stringId = HttpContext.Request.Cookies["UserId"];
             var id = Int32.Parse(stringId);
 
-            userPost.AuthorId = id;
-            var post = await _postService.CreatePostAsync(userPost);
-
             if (userPost == null)
             {
                 return BadRequest();
             }
+
+            userPost.AuthorId = id;
+            var post = await _postService.CreatePostAsync(userPost);
+
             return View("Post", post);
         }
 
