@@ -16,7 +16,7 @@ namespace NewsPortal.Web.Components
             _userService = userService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int postId, string userName)
+        public async Task<IViewComponentResult> InvokeAsync(int postId, int? commentId = null)
         {
             var stringId = HttpContext.Request.Cookies["UserId"];
             var id = Int32.Parse(stringId);
@@ -26,10 +26,11 @@ namespace NewsPortal.Web.Components
             var comment = new UserComment()
             {
                 PostId = postId,
+                ParentId = commentId,
                 UserName = user.UserName
             };
 
-            return View("/Views/Comment/Create.cshtml", comment);
+            return View("/Views/Comment/CreateComment.cshtml", comment);
         }
     }
 }
