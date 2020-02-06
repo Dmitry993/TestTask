@@ -30,7 +30,7 @@ namespace NewsPortal.Web.Controllers
             
             if (user == null)
             {
-                return NotFound();
+                return RedirectToAction("GoogleSignOut", "Auth");
             }
             return View("UserProfile", user);
         }
