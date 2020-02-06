@@ -17,11 +17,6 @@ namespace NewsPortal.Web.Controllers
             _commentService = commentService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> GetComment(UserComment userComment)
         {
             var comment = await _commentService.CreateCommentAsync(userComment);
@@ -35,15 +30,7 @@ namespace NewsPortal.Web.Controllers
         {
             var comment = await _commentService.CreateCommentAsync(userComment);
 
-            return View("/Views/Home/Index.cshtml");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ReplyToComment(UserComment userComment)
-        {
-            var comment = await _commentService.AddReplyToCommentAsync(userComment);
-
-            return View("/Views/Home/Index.cshtml");
+            return RedirectToAction("GetPostById","Post", new { id = comment.PostId});
         }
     }
 }
