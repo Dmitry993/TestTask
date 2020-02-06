@@ -8,7 +8,7 @@ namespace NewsPortal.Logic.Model
     {
         public int Id { get; set; }
 
-        public int? ParentId { get; set; }
+        public int? ParentId { get; set; } = null;
 
         public int? PostId { get; set; }
 
