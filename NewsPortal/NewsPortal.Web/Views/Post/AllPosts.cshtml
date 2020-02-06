@@ -16,12 +16,5 @@
                 @post.Description
             </div>
         </div>
-
-        @if (ViewData["name"].Equals("Home"))
-        {
-            @await Component.InvokeAsync("CommentList", new { postId = post.Id })
-            @await Component.InvokeAsync("AddComment", new { postId = post.Id })
-        }
     }
-
 </div>
