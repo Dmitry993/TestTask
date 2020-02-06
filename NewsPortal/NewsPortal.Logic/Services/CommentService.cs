@@ -41,7 +41,7 @@ namespace NewsPortal.Logic.Services
 
             foreach (var item in userComments)
             {
-                if (item.PostId == id)
+                if (item.PostId == id & item.ParentId == null) 
                 {
                     postComments.Add(item);
                 }
@@ -56,15 +56,6 @@ namespace NewsPortal.Logic.Services
 
             return postComments;
         }
-
-        public async Task<UserComment> AddReplyToCommentAsync(UserComment userComment)
-        {
-            var comment = _mapper.Map<Comment>(userComment);
-            comment.Created = DateTime.UtcNow;
-            await _repository.CreateAsync(comment);
-            await _repository.SaveAsync();
-            return _mapper.Map<UserComment>(comment);
-        } 
 
         public async Task<UserComment> CreateCommentAsync(UserComment userComment)
         {
