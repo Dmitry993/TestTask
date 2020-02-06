@@ -12,15 +12,21 @@
     <div class="form-group">
         @Model.Description
     </div>
-    <hr/>
-</div>
-<div class="row">
-    <div>
-        @if (context.HttpContext.Request.Cookies["UserId"].Equals(Model.AuthorId.ToString()))
-        {
-            @(Html.ActionLink("Edit Post", "EditPost", "Post", Model, new { @class = "btn btn-success" }))
-        }
+    <hr />
 
-        @(Html.ActionLink("Go Home", "Index", "Home", null, new { @class = "btn btn-primary" }))
+    <div class="row">
+        <div>
+            @if (context.HttpContext.Request.Cookies["UserId"].Equals(Model.AuthorId.ToString()))
+            {
+                @(Html.ActionLink("Edit Post", "EditPost", "Post", Model, new { @class = "btn btn-success" }))
+            }
+
+            @(Html.ActionLink("Go Home", "Index", "Home", null, new { @class = "btn btn-primary" }))
+        </div>
+    </div>
+    <div>
+        <b>Comments:</b>
+        @await Component.InvokeAsync("CommentList", new { postId = Model.Id })
+        @await Component.InvokeAsync("AddComment", new { postId = Model.Id })
     </div>
 </div>
