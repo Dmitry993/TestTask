@@ -8,7 +8,7 @@ using OAuth2.Client.Impl;
 using OAuth2.Infrastructure;
 using OAuth2.Models;
 using NewsPortal.Logic.Services;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 using AutoMapper;
 
 namespace NewsPortal.Web.Controllers

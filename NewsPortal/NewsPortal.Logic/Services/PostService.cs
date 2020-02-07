@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using NewsPortal.Data.Models;
 using NewsPortal.Data.Repositories;
-using NewsPortal.Logic.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using NewsPortal.Logic.Models;
 
 namespace NewsPortal.Logic.Services
 {
@@ -19,39 +17,39 @@ namespace NewsPortal.Logic.Services
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<UserPost> CreatePostAsync(UserPost userPost)
+        public async Task<Post> CreatePostAsync(Post userPost)
         {
-            var post = _mapper.Map<Post>(userPost);
+            var post = _mapper.Map<Data.Models.Post>(userPost);
             post.Created = DateTime.UtcNow;
             await _repository.CreateAsync(post);           
             await _repository.SaveAsync();
-            return _mapper.Map<UserPost>(post);
+            return _mapper.Map<Post>(post);
         }
 
-        public async Task<IEnumerable<UserPost>> GetUserPostsAsync(int id)
+        public async Task<IEnumerable<Post>> GetUserPostsAsync(int id)
         {
             var post = await _repository.FindPostsByUserId(id);
-            return _mapper.Map<IEnumerable<UserPost>>(post);
+            return _mapper.Map<IEnumerable<Post>>(post);
         }
 
-        public async Task<IEnumerable<UserPost>> GetAllPostsAsync()
+        public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
             var posts = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<Post>, IEnumerable<UserPost>>(posts);
+            return _mapper.Map<IEnumerable<Data.Models.Post>, IEnumerable<Post>>(posts);
         }
 
-        public async Task<UserPost> GetPostAsync(int id)
+        public async Task<Post> GetPostAsync(int id)
         {
             var post = await _repository.GetAsync(id);
-            return _mapper.Map<UserPost>(post);
+            return _mapper.Map<Post>(post);
         }
 
-        public async Task<UserPost> UpdatePostAsync(UserPost userPost)
+        public async Task<Post> UpdatePostAsync(Post userPost)
         {
-            var post = _mapper.Map<Post>(userPost);
+            var post = _mapper.Map<Data.Models.Post>(userPost);
             _repository.Update(post);
             await _repository.SaveAsync();
-            return _mapper.Map<UserPost>(post);
+            return _mapper.Map<Post>(post);
         }
     }
 }

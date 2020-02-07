@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 
 namespace NewsPortal.Logic.Services
 {
     public interface ICommentService
     {
-        Task<IEnumerable<UserComment>> GetAllCommentsAsync();
+        Task<IEnumerable<Comment>> GetAllCommentsAsync();
 
-        Task<UserComment> GetCommentAsync(int id);
+        Task<Comment> GetCommentAsync(int id);
 
-        Task<UserComment> CreateCommentAsync(UserComment userPost);
+        Task<Comment> CreateCommentAsync(Comment post);
 
-        Task<IEnumerable<UserComment>> GetPostCommentsAsync(int id);
+        Task<IEnumerable<Comment>> GetPostCommentsAsync(int id);
     }
 }

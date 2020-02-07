@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using NewsPortal.Data.Models;
 using NewsPortal.Data.Repositories;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 
 namespace NewsPortal.Logic.Services
 {
@@ -21,49 +19,46 @@ namespace NewsPortal.Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserComment>> GetAllCommentsAsync()
+        public async Task<IEnumerable<Comment>> GetAllCommentsAsync()
         {
             var comments = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<Comment>, IEnumerable<UserComment>>(comments);
+            return _mapper.Map<IEnumerable<Data.Models.Comment>, IEnumerable<Comment>>(comments);
         }
 
-        public async Task<UserComment> GetCommentAsync(int id)
+        public async Task<Comment> GetCommentAsync(int id)
         {
             var comment = await _repository.GetAsync(id);
-            return _mapper.Map<UserComment>(comment);
+            return _mapper.Map<Comment>(comment);
         }
 
-        public async Task<IEnumerable<UserComment>> GetPostCommentsAsync(int id)
+        public async Task<IEnumerable<Comment>> GetPostCommentsAsync(int postId)
         {
-            var postComments = new List<UserComment>();
-            var comments = await _repository.GetAllAsync();
-            var userComments = _mapper.Map<List<UserComment>>(comments);
+            var postComments = new List<Comment>();
+            var comments = await _repository.GetCommentsByPostId(postId);
+            var mappedComments = _mapper.Map<List<Comment>>(comments);
 
-            foreach (var item in userComments)
+            foreach (var item in mappedComments)
             {
-                if (item.PostId == id & item.ParentId == null) 
+                if (item.PostId == postId && item.ParentId == null)
                 {
                     postComments.Add(item);
                 }
 
-                if(postComments.Any(comment => comment.Id == item.ParentId))
-                {
-                    postComments.Where(comment => comment.Id == item.ParentId)
+                postComments.Where(comment => comment.Id == item.ParentId)
                         .ToList()
-                        .ForEach(comment => comment.Reply.Add(item));
-                }
+                        .ForEach(comment => comment.Replies.Add(item));
             }
 
             return postComments;
         }
 
-        public async Task<UserComment> CreateCommentAsync(UserComment userComment)
+        public async Task<Comment> CreateCommentAsync(Comment сomment)
         {
-            var comment = _mapper.Map<Comment>(userComment);
-            comment.Created = DateTime.UtcNow;
-            await _repository.CreateAsync(comment);
+            var mappedComment = _mapper.Map<Data.Models.Comment>(сomment);
+            mappedComment.Created = DateTime.UtcNow;
+            await _repository.CreateAsync(mappedComment);
             await _repository.SaveAsync();
-            return _mapper.Map<UserComment>(comment);
+            return _mapper.Map<Comment>(mappedComment);
         }
     }
 }

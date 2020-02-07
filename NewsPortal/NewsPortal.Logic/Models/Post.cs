@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NewsPortal.Logic.Model
+﻿namespace NewsPortal.Logic.Models
 {
-    public class UserPost
+    public class Post
     {
         public int Id { get; set; }
 

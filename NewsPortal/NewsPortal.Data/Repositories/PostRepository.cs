@@ -29,7 +29,9 @@ namespace NewsPortal.Data.Repositories
         {
             var post = await _context.Posts.FindAsync(id);
             if (post != null)
+            {
                 _context.Posts.Remove(post);
+            }
         }
 
         public async Task<IEnumerable<Post>> GetAllAsync()

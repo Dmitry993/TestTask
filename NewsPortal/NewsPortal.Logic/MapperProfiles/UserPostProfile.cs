@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using NewsPortal.Data.Models;
-using NewsPortal.Logic.Model;
 
 namespace NewsPortal.Logic.MapperProfiles
 {
@@ -8,7 +6,7 @@ namespace NewsPortal.Logic.MapperProfiles
     {
         public UserPostProfile()
         {
-            CreateMap<Post, UserPost>().ReverseMap();
+            CreateMap<Data.Models.Post, Logic.Models.Post>().ReverseMap();
         }
     }
 }

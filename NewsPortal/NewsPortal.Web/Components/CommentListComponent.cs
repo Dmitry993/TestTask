@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NewsPortal.Logic.Model;
 using NewsPortal.Logic.Services;
 
 namespace NewsPortal.Web.Components
@@ -18,21 +14,16 @@ namespace NewsPortal.Web.Components
             _commentService = commentService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int postId, List<UserComment> reply, int commentId)
+        public async Task<IViewComponentResult> InvokeAsync(int postId)
         {
-            if (postId == 0 & commentId == 0)
+            if (postId == 0)
             {
-                return View("/Views/Home/Index.cshtml");
-            }
-
-            if (reply != null)
-            {
-                return View("/Views/Comment/ReplyToComment.cshtml", reply);
+                return Content("Comments not found");
             }
 
             var comments = await _commentService.GetPostCommentsAsync(postId);
 
-            return View("/Views/Comment/Comment.cshtml", comments);
+            return View("/Views/Comment/CommentList.cshtml", comments);
         }
     }
 }

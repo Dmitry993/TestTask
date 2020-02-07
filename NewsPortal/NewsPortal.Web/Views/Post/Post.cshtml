@@ -1,5 +1,5 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
-@model NewsPortal.Logic.Model.UserPost
+@model NewsPortal.Logic.Models.Post
 @{
     ViewData["Title"] = "Post";
     Layout = "_Layout";
@@ -27,6 +27,6 @@
     <div>
         <b>Comments:</b>
         @await Component.InvokeAsync("CommentList", new { postId = Model.Id })
-        @await Component.InvokeAsync("AddComment", new { postId = Model.Id })
+        @await Component.InvokeAsync("CommentEditor", new { postId = Model.Id })
     </div>
 </div>

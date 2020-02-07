@@ -34,7 +34,9 @@ namespace NewsPortal.Data.Repositories
         {
             var user = await _context.Users.FindAsync(id);
             if (user != null)
+            {
                 _context.Users.Remove(user);
+            }
         }
 
         public async Task<User> GetAsync(int id)

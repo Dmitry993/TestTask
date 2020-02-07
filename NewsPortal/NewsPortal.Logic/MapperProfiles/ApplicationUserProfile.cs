@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using NewsPortal.Data.Model;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

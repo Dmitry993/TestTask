@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 using NewsPortal.Logic.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NewsPortal.Web.Views.Components
@@ -20,18 +18,18 @@ namespace NewsPortal.Web.Views.Components
 
         public async Task<IViewComponentResult> InvokeAsync(int id)
         {
-            var posts = new List<UserPost>();
+            var posts = new List<Post>();
 
             if (id == 0)
             {
-                posts = (List<UserPost>) await _postService.GetAllPostsAsync();
+                posts = (List<Post>) await _postService.GetAllPostsAsync();
             }
             else
             {
-                posts = (List<UserPost>) await _postService.GetUserPostsAsync(id);               
+                posts = (List<Post>) await _postService.GetUserPostsAsync(id);               
             }
 
-            return View("/Views/Post/AllPosts.cshtml", posts); 
+            return View("/Views/Post/PostList.cshtml", posts); 
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 using NewsPortal.Logic.Services;
 using NewsPortal.Web.Attributes;
 
@@ -26,7 +24,7 @@ namespace NewsPortal.Web.Controllers
             return View("Post", post);
         }
 
-        public IActionResult GetPost(UserPost userPost)
+        public IActionResult GetPost(Post userPost)
         {
             return View("Post", userPost);
         }
@@ -37,23 +35,23 @@ namespace NewsPortal.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost(UserPost userPost)
+        public async Task<IActionResult> CreatePost(Post userPost)
         {
-            var stringId = HttpContext.Request.Cookies["UserId"];
-            var id = Int32.Parse(stringId);
+            var userIdString = HttpContext.Request.Cookies["UserId"];
+            var userId = Int32.Parse(userIdString);
 
             if (userPost == null)
             {
                 return BadRequest();
             }
 
-            userPost.AuthorId = id;
+            userPost.AuthorId = userId;
             var post = await _postService.CreatePostAsync(userPost);
 
             return View("Post", post);
         }
 
-        public IActionResult EditPost(UserPost userPost)
+        public IActionResult EditPost(Post userPost)
         {
             if (UserIsOwner(userPost))
             {
@@ -64,7 +62,7 @@ namespace NewsPortal.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdatePost(UserPost userPost)
+        public async Task<IActionResult> UpdatePost(Post userPost)
         {
             if (UserIsOwner(userPost))
             {
@@ -75,12 +73,12 @@ namespace NewsPortal.Web.Controllers
             return Forbid();
         }
 
-        private bool UserIsOwner(UserPost userPost)
+        private bool UserIsOwner(Post userPost)
         {
-            var stringId = HttpContext.Request.Cookies["UserId"];
-            var id = Int32.Parse(stringId);
+            var userIdString = HttpContext.Request.Cookies["UserId"];
+            var userId = Int32.Parse(userIdString);
 
-            return userPost.AuthorId == id;
+            return userPost.AuthorId == userId;
         }
     }
 }
