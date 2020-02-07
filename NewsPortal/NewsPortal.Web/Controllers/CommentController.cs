@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 using NewsPortal.Logic.Services;
 
 namespace NewsPortal.Web.Controllers
@@ -17,18 +14,10 @@ namespace NewsPortal.Web.Controllers
             _commentService = commentService;
         }
 
-        public async Task<IActionResult> GetComment(UserComment userComment)
-        {
-            var comment = await _commentService.CreateCommentAsync(userComment);
-
-            return RedirectToPage("Index", "/Views/Home");
-        }
-
-
         [HttpPost]
-        public async Task<IActionResult> CreateComment(UserComment userComment)
+        public async Task<IActionResult> CreateComment(Comment comment)
         {
-            var comment = await _commentService.CreateCommentAsync(userComment);
+            var newComment = await _commentService.CreateCommentAsync(comment);
 
             return RedirectToAction("GetPostById","Post", new { id = comment.PostId});
         }
