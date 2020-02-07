@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NewsPortal.Data.Model;
 
 namespace NewsPortal.Data.Models
 {
@@ -10,9 +11,11 @@ namespace NewsPortal.Data.Models
 
         public int? ParentId { get; set; }
 
-        public int? PostId { get; set; }
+        public int PostId { get; set; }
 
-        public string UserName { get; set; }
+        public int UserId { get; set; }
+
+        public User Author { get; set; }
 
         public string Description { get; set; }
 

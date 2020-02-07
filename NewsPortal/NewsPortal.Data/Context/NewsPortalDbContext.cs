@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using NewsPortal.Data.Model;
 using NewsPortal.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NewsPortal.Data.Context
 {
@@ -28,6 +24,12 @@ namespace NewsPortal.Data.Context
             modelBuilder.Entity<User>()
                 .HasMany(user => user.Posts)
                 .WithOne(post => post.Author);
+
+            modelBuilder.Entity<User>()
+                .HasMany<Comment>()
+                .WithOne(comment => comment.Author)
+                .HasForeignKey(comment => comment.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Post>()
                 .HasMany<Comment>()
