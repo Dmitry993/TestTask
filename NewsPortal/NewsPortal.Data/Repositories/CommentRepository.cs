@@ -3,7 +3,7 @@ using NewsPortal.Data.Context;
 using NewsPortal.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NewsPortal.Data.Repositories
@@ -28,12 +28,23 @@ namespace NewsPortal.Data.Repositories
         {
             var comment = await _context.Comments.FindAsync(id);
             if (comment != null)
+            {
                 _context.Comments.Remove(comment);
+            }
         }
 
         public async Task<IEnumerable<Comment>> GetAllAsync()
         {
             return await _context.Comments.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Comment>> GetCommentsByPostId(int postId)
+        {
+            var comments = await _context.Comments
+                .Include(comment=>comment.Author)
+                .Where(comment => comment.PostId == postId)
+                .ToListAsync();
+            return comments;
         }
 
         public async Task<Comment> GetAsync(int id)
