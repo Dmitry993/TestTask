@@ -17,21 +17,16 @@ namespace NewsPortal.Web.Components
             _commentService = commentService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int postId, List<Comment> replies)
+        public Task<IViewComponentResult> InvokeAsync(List<Comment> replies)
         {
-            if (replies != null && replies.Any())
+            if (replies == null)
             {
-                return View("/Views/Comment/Comment.cshtml", replies);
+                return Task.FromResult <IViewComponentResult> 
+                    (Content("Comments not found"));
             }
 
-            if (postId == 0)
-            {
-                return Content("Comments not found");
-            }
-
-            var comments = await _commentService.GetPostCommentsAsync(postId);
-
-            return View("/Views/Comment/Comment.cshtml", comments);
+            return Task.FromResult <IViewComponentResult> 
+                (View("/Views/Comment/Comment.cshtml", replies));
         }
     }
 }

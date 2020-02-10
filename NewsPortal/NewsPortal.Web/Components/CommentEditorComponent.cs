@@ -18,7 +18,7 @@ namespace NewsPortal.Web.Components
             _userService = userService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(List<Comment> comments, int postId, int? commentId = null)
+        public Task<IViewComponentResult> InvokeAsync(List<Comment> comments, int postId, int? commentId = null)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
@@ -33,7 +33,8 @@ namespace NewsPortal.Web.Components
                     ParentId = comment.Id,
                     UserId = userId
                 };
-                return View("/Views/Comment/CommentEditor.cshtml", comment);
+                return Task.FromResult <IViewComponentResult> 
+                    (View("/Views/Comment/CommentEditor.cshtml", comment));
             }
 
             var postComment = new Comment()
@@ -43,7 +44,8 @@ namespace NewsPortal.Web.Components
                 UserId = userId
             };
 
-            return View("/Views/Comment/CommentEditor.cshtml", postComment);
+            return Task.FromResult <IViewComponentResult> 
+                (View("/Views/Comment/CommentEditor.cshtml", postComment));
         }
     }
 }
