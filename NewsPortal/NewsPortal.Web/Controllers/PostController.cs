@@ -24,11 +24,6 @@ namespace NewsPortal.Web.Controllers
             return View("Post", post);
         }
 
-        public IActionResult GetPost(Post userPost)
-        {
-            return View("Post", userPost);
-        }
-
         public IActionResult CreatePost()
         {
             return View("Create");
