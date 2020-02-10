@@ -2,6 +2,7 @@
 using NewsPortal.Data.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NewsPortal.Logic.Models;
 
@@ -11,17 +12,19 @@ namespace NewsPortal.Logic.Services
     {
         private readonly IMapper _mapper;
         private readonly IPostRepository _repository;
+        private readonly ICommentService _service;
 
-        public PostService(IMapper mapper, IPostRepository repository)
+        public PostService(IMapper mapper, IPostRepository repository, ICommentService service)
         {
             _repository = repository;
+            _service = service;
             _mapper = mapper;
         }
         public async Task<Post> CreatePostAsync(Post userPost)
         {
             var post = _mapper.Map<Data.Models.Post>(userPost);
             post.Created = DateTime.UtcNow;
-            await _repository.CreateAsync(post);           
+            await _repository.CreateAsync(post);
             await _repository.SaveAsync();
             return _mapper.Map<Post>(post);
         }
@@ -41,7 +44,10 @@ namespace NewsPortal.Logic.Services
         public async Task<Post> GetPostAsync(int id)
         {
             var post = await _repository.GetAsync(id);
-            return _mapper.Map<Post>(post);
+            var comments = await _service.GetPostCommentsAsync(id);
+            var mappedPost = _mapper.Map<Post>(post);
+            mappedPost.Comments = comments.ToList();
+            return mappedPost;
         }
 
         public async Task<Post> UpdatePostAsync(Post userPost)
