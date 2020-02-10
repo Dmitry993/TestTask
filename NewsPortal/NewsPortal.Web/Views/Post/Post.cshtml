@@ -26,7 +26,7 @@
     </div>
     <div>
         <b>Comments:</b>
-        @await Component.InvokeAsync("CommentList", new { postId = Model.Id })
+        @await Component.InvokeAsync("Comment", new { postId = Model.Id })
         @await Component.InvokeAsync("CommentEditor", new { postId = Model.Id })
     </div>
 </div>

@@ -25,15 +25,15 @@ namespace NewsPortal.Web.Components
 
             if (comments != null && comments.Any())
             {
-                var cooment = comments.FirstOrDefault();
+                var comment = comments.FirstOrDefault();
 
                 var replyToComment = new Comment()
                 {
-                    PostId = cooment.PostId,
-                    ParentId = cooment.Id,
+                    PostId = comment.PostId,
+                    ParentId = comment.Id,
                     UserId = userId
                 };
-                return View("/Views/Comment/CommentEditor.cshtml", cooment);
+                return View("/Views/Comment/CommentEditor.cshtml", comment);
             }
 
             var postComment = new Comment()
