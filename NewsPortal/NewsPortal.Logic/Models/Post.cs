@@ -1,4 +1,6 @@
-﻿namespace NewsPortal.Logic.Models
+﻿using System.Collections.Generic;
+
+namespace NewsPortal.Logic.Models
 {
     public class Post
     {
@@ -11,5 +13,7 @@
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public List<Comment> Comments { get; set; }
     }
 }
