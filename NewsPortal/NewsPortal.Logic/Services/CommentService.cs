@@ -33,23 +33,12 @@ namespace NewsPortal.Logic.Services
 
         public async Task<IEnumerable<Comment>> GetPostCommentsAsync(int postId)
         {
-            var postComments = new List<Comment>();
             var comments = await _repository.GetCommentsByPostId(postId);
             var mappedComments = _mapper.Map<List<Comment>>(comments);
+            var topComments = mappedComments.Where(comment => comment.ParentId == null).ToList();
+            topComments.ForEach(comment =>  AddReplies(comment, mappedComments));
 
-            foreach (var item in mappedComments)
-            {
-                if (item.PostId == postId && item.ParentId == null)
-                {
-                    postComments.Add(item);
-                }
-
-                postComments.Where(comment => comment.Id == item.ParentId)
-                        .ToList()
-                        .ForEach(comment => comment.Replies.Add(item));
-            }
-
-            return postComments;
+            return topComments;
         }
 
         public async Task<Comment> CreateCommentAsync(Comment сomment)
@@ -59,6 +48,12 @@ namespace NewsPortal.Logic.Services
             await _repository.CreateAsync(mappedComment);
             await _repository.SaveAsync();
             return _mapper.Map<Comment>(mappedComment);
+        }
+
+        private void AddReplies(Comment comment, List<Comment> postComments)
+        {
+            comment.Replies = postComments.Where(reply => reply.ParentId == comment.Id).ToList();
+            comment.Replies.ForEach(childComment => AddReplies(childComment, postComments));
         }
     }
 }
