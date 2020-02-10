@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NewsPortal.Data.Context;
-using NewsPortal.Data.Model;
+using NewsPortal.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,51 +8,48 @@ using System.Threading.Tasks;
 
 namespace NewsPortal.Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class CommentRepository : ICommentRepository
     {
         private bool _disposed = false;
         private readonly NewsPortalDbContext _context;
 
-        public UserRepository(NewsPortalDbContext context)
+        public CommentRepository(NewsPortalDbContext context)
         {
             _context = context;
         }
 
-        public async Task<User> FindUserByGoogleIdAsync(string id)
+        public async Task<Comment> CreateAsync(Comment item)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.GoogleId == id);
-            return user;
-        }
-
-        public async Task<User> CreateAsync(User item)
-        {
-            await _context.Users.AddAsync(item);
+            await _context.Comments.AddAsync(item);
             return item;
         }
 
         public async Task DeleteAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment != null)
             {
-                _context.Users.Remove(user);
+                _context.Comments.Remove(comment);
             }
         }
 
-        public async Task<User> GetAsync(int id)
+        public async Task<IEnumerable<Comment>> GetAllAsync()
         {
-            return await _context.Users.FindAsync(id);               
+            return await _context.Comments.ToListAsync();
         }
 
-        public async Task<User> GetUserWithPostsAsync(int id)
-        {            
-            return await _context.Users.Include(user => user.Posts)
-                .Where(user => user.Id == id).FirstOrDefaultAsync();
+        public async Task<IEnumerable<Comment>> GetCommentsByPostId(int postId)
+        {
+            var comments = await _context.Comments
+                .Include(comment=>comment.Author)
+                .Where(comment => comment.PostId == postId)
+                .ToListAsync();
+            return comments;
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<Comment> GetAsync(int id)
         {
-            return await _context.Users.ToListAsync();
+           return await _context.Comments.FindAsync(id);
         }
 
         public async Task SaveAsync()
@@ -60,7 +57,7 @@ namespace NewsPortal.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public void Update(User item)
+        public void Update(Comment item)
         {
             _context.Entry(item).State = EntityState.Modified;
         }

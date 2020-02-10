@@ -1,8 +1,6 @@
-﻿using NewsPortal.Data.Model;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace NewsPortal.Data.Models
+namespace NewsPortal.Logic.Models
 {
     public class Post
     {
@@ -10,12 +8,12 @@ namespace NewsPortal.Data.Models
 
         public int AuthorId { get; set; }
 
-        public User Author { get; set; }
+        public ApplicationUser Author { get; set; }
 
         public string Name { get; set; }
 
         public string Description { get; set; }
 
-        public DateTime Created { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

@@ -23,14 +23,14 @@ namespace NewsPortal.Web.Controllers
 
         public async Task<IActionResult> GetUser()
         {
-            var stringId = HttpContext.Request.Cookies["UserId"];
-            var id = Int32.Parse(stringId);
+            var userIdString = HttpContext.Request.Cookies["UserId"];
+            var userId = Int32.Parse(userIdString);
 
-            var user = await _userService.GetUserAsync(id);
+            var user = await _userService.GetUserAsync(userId);
             
             if (user == null)
             {
-                return NotFound();
+                return RedirectToAction("GoogleSignOut", "Auth");
             }
             return View("UserProfile", user);
         }

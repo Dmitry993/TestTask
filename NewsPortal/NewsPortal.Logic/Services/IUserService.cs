@@ -1,4 +1,4 @@
-﻿using NewsPortal.Logic.Model;
+﻿using NewsPortal.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

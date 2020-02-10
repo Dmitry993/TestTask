@@ -1,0 +1,27 @@
+﻿@model NewsPortal.Logic.Models.Comment
+@{
+ 
+}
+
+@using (Html.BeginForm("CreateComment", "Comment", FormMethod.Post))
+{
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.PostId)
+                @Html.HiddenFor(model => model.ParentId)
+                @Html.HiddenFor(model => model.UserId)
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Comment" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}

@@ -29,8 +29,10 @@ namespace NewsPortal.Data.Repositories
         {
             var post = await _context.Posts.FindAsync(id);
             if (post != null)
+            {
                 _context.Posts.Remove(post);
-        }       
+            }
+        }
 
         public async Task<IEnumerable<Post>> GetAllAsync()
         {
@@ -44,7 +46,7 @@ namespace NewsPortal.Data.Repositories
 
         public async Task<IEnumerable<Post>> FindPostsByUserId(int id)
         {
-            var allPosts = await _context.Posts.Where(post => post.AuthorId == id).ToListAsync();            
+            var allPosts = await _context.Posts.Where(post => post.AuthorId == id).ToListAsync();
             return allPosts;
         }
 

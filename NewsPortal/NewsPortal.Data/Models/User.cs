@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NewsPortal.Data.Model
 {
-    public class User   
+    public class User
     {
         public int Id { get; set; }
 

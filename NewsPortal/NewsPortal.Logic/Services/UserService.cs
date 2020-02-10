@@ -3,7 +3,7 @@ using NewsPortal.Data.Model;
 using NewsPortal.Data.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 using System;
 
 namespace NewsPortal.Logic.Services

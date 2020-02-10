@@ -29,6 +29,14 @@ namespace NewsPortal.Web
             builder.RegisterType<HttpContextAccessor>()
                 .As<IHttpContextAccessor>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<CommentRepository>()
+                .As<ICommentRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CommentService>()
+                .As<ICommentService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

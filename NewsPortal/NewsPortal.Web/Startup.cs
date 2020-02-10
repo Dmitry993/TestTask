@@ -40,7 +40,8 @@ namespace NewsPortal.Web
             services.AddAutoMapper(
                 typeof(ApplicationUserProfile).Assembly,
                 typeof(UserProfile).Assembly, 
-                typeof(UserPostProfile).Assembly);            
+                typeof(UserPostProfile).Assembly,
+                typeof(UserCommentProfile).Assembly);
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace NewsPortal.Logic.Model
+namespace NewsPortal.Logic.Models
 {
-    public class ApplicationUser   
+    public class ApplicationUser
     {
         public int Id { get; set; }
 
@@ -18,6 +16,6 @@ namespace NewsPortal.Logic.Model
 
         public string Email { get; set; }
 
-        public IEnumerable<UserPost> Posts { get; set; }
+        public IEnumerable<Post> Posts { get; set; }
     }
 }

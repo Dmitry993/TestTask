@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using NewsPortal.Logic.Model;
+using NewsPortal.Logic.Models;
 using OAuth2.Models;
 using System;
 

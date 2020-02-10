@@ -1,4 +1,4 @@
-﻿using NewsPortal.Logic.Model;
+﻿using NewsPortal.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,14 +6,14 @@ namespace NewsPortal.Logic.Services
 {
     public interface IPostService
     {
-        Task<IEnumerable<UserPost>> GetAllPostsAsync();
+        Task<IEnumerable<Post>> GetAllPostsAsync();
 
-        Task<UserPost> GetPostAsync(int id);
+        Task<Post> GetPostAsync(int id);
 
-        Task<IEnumerable<UserPost>> GetUserPostsAsync(int id);
+        Task<IEnumerable<Post>> GetUserPostsAsync(int id);
 
-        Task<UserPost> CreatePostAsync(UserPost userPost);
+        Task<Post> CreatePostAsync(Post userPost);
 
-        Task<UserPost> UpdatePostAsync(UserPost userPost);
+        Task<Post> UpdatePostAsync(Post userPost);
     }
 }
