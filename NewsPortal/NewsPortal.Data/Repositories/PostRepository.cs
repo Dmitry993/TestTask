@@ -41,7 +41,10 @@ namespace NewsPortal.Data.Repositories
 
         public async Task<Post> GetAsync(int id)
         {
-            return await _context.Posts.FindAsync(id);
+            return await _context.Posts
+                .Include(post => post.Rating)
+                .Where(post => post.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Post>> FindPostsByUserId(int id)
