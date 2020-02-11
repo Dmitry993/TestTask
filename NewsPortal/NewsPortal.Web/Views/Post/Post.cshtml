@@ -20,8 +20,11 @@
             {
                 @(Html.ActionLink("Edit Post", "EditPost", "Post", Model, new { @class = "btn btn-success" }))
             }
-
-            @(Html.ActionLink("Go Home", "Index", "Home", null, new { @class = "btn btn-primary" }))
+            <b>Rating:@Model.Rating.Value</b>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                @Html.ActionLink("+", "UpRating", "Rating", new {postId = Model.Id}, new { @class = "btn btn-primary" })
+                @Html.ActionLink("-", "DownRating", "Rating", new {postId = Model.Id}, new { @class = "btn btn-primary" })
+            </div>
         </div>
     </div>
     <div>
