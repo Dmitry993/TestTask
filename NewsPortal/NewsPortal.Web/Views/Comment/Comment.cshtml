@@ -24,8 +24,7 @@
                 @if (comment.Replies.Any())
                 {
                 <div style="margin-left: 20px">
-                    @*@Component.Invoke("Comment", new { replies = comment.Replies })*@
-                    <component type="typeof(CommentComponent)" render-mode="ServerPrerendered"/>
+                    @await Component.InvokeAsync("Comment", new { replies = comment.Replies })
                 </div>
                 }
 
