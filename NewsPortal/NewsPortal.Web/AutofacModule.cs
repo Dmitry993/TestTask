@@ -37,6 +37,14 @@ namespace NewsPortal.Web
             builder.RegisterType<CommentService>()
                 .As<ICommentService>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<RatingRepository>()
+                .As<IRatingRepository>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<RatingService>()
+                .As<IRatingService>()
+                .InstancePerLifetimeScope();
         }
     }
 }
