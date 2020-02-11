@@ -15,7 +15,7 @@ namespace NewsPortal.Data.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
-
+        public DbSet<Rating> Ratings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,11 @@ namespace NewsPortal.Data.Context
                 .HasMany<Comment>()
                 .WithOne()
                 .HasForeignKey(comment => comment.PostId);
+
+            modelBuilder.Entity<Post>()
+                .HasOne(c => c.Rating)
+                .WithMany()
+                .HasForeignKey(post => post.RatingId);
 
             modelBuilder.Entity<Comment>()
                 .HasOne<Comment>()
