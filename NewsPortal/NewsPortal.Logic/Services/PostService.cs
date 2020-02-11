@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NewsPortal.Logic.Models;
 
+
 namespace NewsPortal.Logic.Services
 {
     public class PostService : IPostService
@@ -14,16 +15,20 @@ namespace NewsPortal.Logic.Services
         private readonly IPostRepository _repository;
         private readonly ICommentService _service;
 
-        public PostService(IMapper mapper, IPostRepository repository, ICommentService service)
+        public PostService(IMapper mapper, IPostRepository repository, 
+            ICommentService service)
         {
             _repository = repository;
             _service = service;
             _mapper = mapper;
         }
+
         public async Task<Post> CreatePostAsync(Post userPost)
         {
             var post = _mapper.Map<Data.Models.Post>(userPost);
             post.Created = DateTime.UtcNow;
+            var rating = new Rating();
+            post.Rating = _mapper.Map<Data.Models.Rating>(rating);
             await _repository.CreateAsync(post);
             await _repository.SaveAsync();
             return _mapper.Map<Post>(post);
