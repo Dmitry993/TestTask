@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace NewsPortal.Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
-        private bool _disposed = false;
         private readonly NewsPortalDbContext _context;
 
-        public UserRepository(NewsPortalDbContext context)
+        public UserRepository(NewsPortalDbContext context):base(context)
         {
             _context = context;
         }
@@ -24,63 +23,10 @@ namespace NewsPortal.Data.Repositories
             return user;
         }
 
-        public async Task<User> CreateAsync(User item)
-        {
-            await _context.Users.AddAsync(item);
-            return item;
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-            }
-        }
-
-        public async Task<User> GetAsync(int id)
-        {
-            return await _context.Users.FindAsync(id);               
-        }
-
         public async Task<User> GetUserWithPostsAsync(int id)
         {            
             return await _context.Users.Include(user => user.Posts)
                 .Where(user => user.Id == id).FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<User>> GetAllAsync()
-        {
-            return await _context.Users.ToListAsync();
-        }
-
-        public async Task SaveAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        public void Update(User item)
-        {
-            _context.Entry(item).State = EntityState.Modified;
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this._disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }
