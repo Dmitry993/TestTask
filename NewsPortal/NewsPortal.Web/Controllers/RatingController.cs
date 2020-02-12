@@ -17,22 +17,11 @@ namespace NewsPortal.Web.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> ChangePostRating(int postId, bool value)
+        public async Task<IActionResult> ChangePostRating(int postId, Rating value)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
-            var userClicked = await _service.UserClickedRatingAsync(postId, userId);
-            if (userClicked == value)
-            {
-                await _service.CancelRatingAsync(postId, userId, value);
-                return RedirectToAction("GetPostById", "Post", new { id = postId });
-            }
-            if (userClicked == null)
-            {
-                await _service.AddRatingAsync(postId, userId, value);
-                return RedirectToAction("GetPostById", "Post", new { id = postId });
-            }
-
+            await _service.UserClickedRatingAsync(postId, userId, value);
             return RedirectToAction("GetPostById", "Post", new { id = postId });
         }
     }

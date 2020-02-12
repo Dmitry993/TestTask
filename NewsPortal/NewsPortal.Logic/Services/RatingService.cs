@@ -12,7 +12,7 @@ namespace NewsPortal.Logic.Services
         private readonly IRatingRepository _repository;
         private readonly IPostService _postService;
 
-        public RatingService(IRatingRepository repository, IMapper mapper, 
+        public RatingService(IRatingRepository repository, IMapper mapper,
             IPostService postService)
         {
             _repository = repository;
@@ -20,31 +20,42 @@ namespace NewsPortal.Logic.Services
             _postService = postService;
         }
 
-        public async Task<bool?> UserClickedRatingAsync(int postId, int userId)
+        public async Task<Rating> UserClickedRatingAsync(int postId, int userId, Rating value)
         {
-            var rating = await _repository.FindItemByPostIdAndUserId(postId, userId);
-            return rating?.Value;
+            var rating = await _repository.FindItemByPostId(postId, userId);
+            if (rating == null && !value.Equals(Rating.Nothing))
+            {
+                await AddRatingAsync(postId, userId, value);
+            }
+            if (rating != null && rating.Value == (int)value)
+            {
+                await CancelRatingAsync(postId, userId, value);
+            }
+
+            var ratingValue = rating != null ? (Rating)rating.Value : Rating.Nothing;
+            return ratingValue;
         }
 
-        public async Task CancelRatingAsync(int postId, int userId, bool value)
+        public async Task CancelRatingAsync(int postId, int userId, Rating value)
         {
-            await _repository.DeleteItemByPostIdAndUserId(postId, userId);
+            await _repository.DeleteItemByPostId(postId, userId);
             await _repository.SaveAsync();
-            await _postService.UpdatePostRatingAsync(postId, null, value);
+            var reverseRating = Rating.Add.Equals(value) ? Rating.Subtract : Rating.Add;
+            await _postService.UpdatePostRatingAsync(postId, reverseRating);
         }
 
-        public async Task AddRatingAsync(int postId, int userId, bool value)
+        public async Task AddRatingAsync(int postId, int userId, Rating value)
         {
             var rating = new PostRating()
             {
                 PostId = postId,
                 UserId = userId,
-                Value = value
+                Value = (int)value
             };
 
             await _repository.CreateAsync(rating);
             await _repository.SaveAsync();
-            await _postService.UpdatePostRatingAsync(postId, value, null);
+            await _postService.UpdatePostRatingAsync(postId, value);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace NewsPortal.Data.Models
         public int Id { get; set; }
         public int PostId { get; set; }
         public int UserId { get; set; }
-        public bool Value { get; set; }
+        public int Value { get; set; }
         public DateTime Created { get; set; }
     }
 }

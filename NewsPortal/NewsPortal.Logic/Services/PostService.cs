@@ -53,14 +53,14 @@ namespace NewsPortal.Logic.Services
             return mappedPost;
         }
 
-        public async Task UpdatePostRatingAsync(int postId, bool? value, bool? cancelValue)
+        public async Task UpdatePostRatingAsync(int postId, Rating value)
         {
             var post = await _repository.GetAsync(postId);
-            if (value == true || cancelValue == false)
+            if (Rating.Add.Equals(value))
             {
                 post.Rating += 1;
             }
-            if (value == false || cancelValue == true)
+            else
             {
                 post.Rating -= 1;
             }

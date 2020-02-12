@@ -8,8 +8,8 @@ namespace NewsPortal.Data.Repositories
 {
     public interface IRatingRepository : IRepository<PostRating>
     {
-        Task<PostRating> FindItemByPostIdAndUserId(int postId, int userId);
+        Task<PostRating> FindItemByPostId(int postId, int userId);
 
-        Task DeleteItemByPostIdAndUserId(int postId, int userId);
+        Task DeleteItemByPostId(int postId, int userId);
     }
 }

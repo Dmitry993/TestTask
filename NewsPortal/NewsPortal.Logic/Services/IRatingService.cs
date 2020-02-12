@@ -5,10 +5,10 @@ namespace NewsPortal.Logic.Services
 {
     public interface IRatingService
     {
-        Task AddRatingAsync(int postId, int userId, bool value);
+        Task AddRatingAsync(int postId, int userId, Rating value);
 
-        Task<bool?> UserClickedRatingAsync(int postId, int userId);
+        Task<Rating> UserClickedRatingAsync(int postId, int userId, Rating value);
 
-        Task CancelRatingAsync(int postId, int userId, bool value);
+        Task CancelRatingAsync(int postId, int userId, Rating value);
     }
 }

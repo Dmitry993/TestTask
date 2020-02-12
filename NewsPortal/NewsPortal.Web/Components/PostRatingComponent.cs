@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NewsPortal.Logic.Models;
 using NewsPortal.Logic.Services;
 
 namespace NewsPortal.Web.Components
@@ -23,12 +24,12 @@ namespace NewsPortal.Web.Components
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
-            var userClicked = await _ratingService.UserClickedRatingAsync(postId, userId);
-            if (userClicked == true)
+            var userClick = await _ratingService.UserClickedRatingAsync(postId, userId,Rating.Nothing);
+            if (userClick.Equals(Rating.Add))
             {
                 return Content("You clicked plus;");
             }
-            if (userClicked == false)
+            if (userClick.Equals(Rating.Subtract))
             {
                 return Content("You clicked minus;");
             }
