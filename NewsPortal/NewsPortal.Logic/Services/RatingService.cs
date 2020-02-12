@@ -2,6 +2,7 @@
 using NewsPortal.Data.Repositories;
 using NewsPortal.Logic.Models;
 using System.Threading.Tasks;
+using NewsPortal.Data.Models;
 
 namespace NewsPortal.Logic.Services
 {
@@ -9,54 +10,41 @@ namespace NewsPortal.Logic.Services
     {
         private readonly IMapper _mapper;
         private readonly IRatingRepository _repository;
-        private readonly IPostRepository _postRepository;
+        private readonly IPostService _postService;
 
         public RatingService(IRatingRepository repository, IMapper mapper, 
-            IPostRepository postRepository)
+            IPostService postService)
         {
             _repository = repository;
             _mapper = mapper;
-            _postRepository = postRepository;
+            _postService = postService;
         }
 
-        public async Task<Rating> GetPostRatingAsync(int id)
+        public async Task<bool?> UserClickedRatingAsync(int postId, int userId)
         {
-            var rating = await _repository.GetAsync(id);
-            return _mapper.Map<Rating>(rating);
+            var rating = await _repository.FindItemByPostIdAndUserId(postId, userId);
+            return rating?.Value;
         }
 
-        public async Task<Rating> UpPostRatingAsync(int postId)
+        public async Task CancelRatingAsync(int postId, int userId, bool value)
         {
-            var post = await _postRepository.GetAsync(postId);
-            var newRating = new Rating()
-            { 
-                PostId = post.Id,
-                Value = post.Rating.Value += 1
-            };
-            var mappedRating = _mapper.Map<Data.Models.Rating>(newRating);
-            await _repository.CreateAsync(mappedRating);
+            await _repository.DeleteItemByPostIdAndUserId(postId, userId);
             await _repository.SaveAsync();
-            post.RatingId = mappedRating.Id;
-            _postRepository.Update(post);
-            await _postRepository.SaveAsync();
-            return newRating;
+            await _postService.UpdatePostRatingAsync(postId, null, value);
         }
 
-         public async Task<Rating> DownPostRatingAsync(int postId)
+        public async Task AddRatingAsync(int postId, int userId, bool value)
         {
-            var post = await _postRepository.GetAsync(postId);
-            var newRating = new Rating()
+            var rating = new PostRating()
             {
-                PostId = post.Id,
-                Value = post.Rating.Value -= 1
+                PostId = postId,
+                UserId = userId,
+                Value = value
             };
-            var mappedRating = _mapper.Map<Data.Models.Rating>(newRating);
-            await _repository.CreateAsync(mappedRating);
+
+            await _repository.CreateAsync(rating);
             await _repository.SaveAsync();
-            post.RatingId = mappedRating.Id;
-            _postRepository.Update(post);
-            await _postRepository.SaveAsync();
-            return newRating;
+            await _postService.UpdatePostRatingAsync(postId, value, null);
         }
     }
 }
