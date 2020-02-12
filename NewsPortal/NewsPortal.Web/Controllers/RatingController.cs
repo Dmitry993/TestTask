@@ -10,23 +10,28 @@ namespace NewsPortal.Web.Controllers
 {
     public class RatingController : Controller
     {
-        private IRatingService _service;
+        private readonly IRatingService _service;
 
         public RatingController(IRatingService service)
         {
             _service = service;
         }
 
-        public async Task<IActionResult> UpRating(int postId)
+        public async Task<IActionResult> ChangePostRating(int postId, bool value)
         {
-            await _service.UpPostRatingAsync(postId);
-
-            return RedirectToAction("GetPostById", "Post", new { id = postId });
-        }
-
-        public async Task<IActionResult> DownRating(int postId)
-        {
-            await _service.DownPostRatingAsync(postId);
+            var userIdString = HttpContext.Request.Cookies["UserId"];
+            var userId = Int32.Parse(userIdString);
+            var userClicked = await _service.UserClickedRatingAsync(postId, userId);
+            if (userClicked == value)
+            {
+                await _service.CancelRatingAsync(postId, userId, value);
+                return RedirectToAction("GetPostById", "Post", new { id = postId });
+            }
+            if (userClicked == null)
+            {
+                await _service.AddRatingAsync(postId, userId, value);
+                return RedirectToAction("GetPostById", "Post", new { id = postId });
+            }
 
             return RedirectToAction("GetPostById", "Post", new { id = postId });
         }
