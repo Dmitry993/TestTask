@@ -22,5 +22,15 @@ namespace NewsPortal.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task DeleteItemByPostIdAndUserId(int postId, int userId)
+        {
+            var rating = await _context.Ratings
+                .Where(rating => rating.PostId == postId && rating.UserId == userId)
+                .FirstOrDefaultAsync();
+            if (rating != null)
+            {
+                _context.Ratings.Remove(rating);
+            }
+        }
     }
 }
