@@ -8,11 +8,9 @@ namespace NewsPortal.Logic.Models
 
         public int AuthorId { get; set; }
 
-        public int RatingId { get; set; }
-
         public ApplicationUser Author { get; set; }
 
-        public Rating Rating { get; set; }
+        public int Rating { get; set; }
 
         public string Name { get; set; }
 
