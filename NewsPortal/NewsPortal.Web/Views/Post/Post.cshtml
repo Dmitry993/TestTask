@@ -20,11 +20,15 @@
             {
                 @(Html.ActionLink("Edit Post", "EditPost", "Post", Model, new { @class = "btn btn-success" }))
             }
-            <b>Rating:@Model.Rating.Value</b>
-            <div class="btn-group" role="group" aria-label="Basic example">
-                @Html.ActionLink("+", "UpRating", "Rating", new {postId = Model.Id}, new { @class = "btn btn-primary" })
-                @Html.ActionLink("-", "DownRating", "Rating", new {postId = Model.Id}, new { @class = "btn btn-primary" })
-            </div>
+            @if (!context.HttpContext.Request.Cookies["UserId"].Equals(Model.AuthorId.ToString()))
+            {
+                <b style="margin-left: 50px">Rating:@Model.Rating</b>
+                <div class="btn-group" style="margin-left: 20px" role="group" aria-label="Basic example">
+                    @Html.ActionLink("+", "ChangePostRating", "Rating", new {postId = Model.Id, value = true}, new {@class = "btn btn-primary"})
+                    @Html.ActionLink("-", "ChangePostRating", "Rating", new {postId = Model.Id, value = false}, new {@class = "btn btn-primary"})
+                </div>
+                @await Component.InvokeAsync("PostRating", new {postId = Model.Id})
+            }
         </div>
     </div>
     <div>
