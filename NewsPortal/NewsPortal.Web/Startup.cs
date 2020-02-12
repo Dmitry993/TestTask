@@ -40,9 +40,8 @@ namespace NewsPortal.Web
                 typeof(ApplicationUserProfile).Assembly,
                 typeof(UserProfile).Assembly,
                 typeof(UserPostProfile).Assembly,
-                typeof(UserCommentProfile).Assembly,
-                typeof(RatingProfile).Assembly);
-            services.AddMvc(options =>
+                typeof(UserCommentProfile).Assembly);
+                services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
             });                     
