@@ -27,8 +27,6 @@ namespace NewsPortal.Logic.Services
         {
             var post = _mapper.Map<Data.Models.Post>(userPost);
             post.Created = DateTime.UtcNow;
-            var rating = new Rating();
-            post.Rating = _mapper.Map<Data.Models.Rating>(rating);
             await _repository.CreateAsync(post);
             await _repository.SaveAsync();
             return _mapper.Map<Post>(post);
@@ -53,6 +51,21 @@ namespace NewsPortal.Logic.Services
             var mappedPost = _mapper.Map<Post>(post);
             mappedPost.Comments = comments.ToList();
             return mappedPost;
+        }
+
+        public async Task UpdatePostRatingAsync(int postId, bool? value, bool? cancelValue)
+        {
+            var post = await _repository.GetAsync(postId);
+            if (value == true || cancelValue == false)
+            {
+                post.Rating += 1;
+            }
+            if (value == false || cancelValue == true)
+            {
+                post.Rating -= 1;
+            }
+            _repository.Update(post);
+            await _repository.SaveAsync();
         }
 
         public async Task<Post> UpdatePostAsync(Post userPost)

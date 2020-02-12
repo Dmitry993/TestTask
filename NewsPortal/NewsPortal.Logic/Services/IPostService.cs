@@ -10,6 +10,8 @@ namespace NewsPortal.Logic.Services
 
         Task<Post> GetPostAsync(int id);
 
+        Task UpdatePostRatingAsync(int postId, bool? value, bool? cancelValue);
+
         Task<IEnumerable<Post>> GetUserPostsAsync(int id);
 
         Task<Post> CreatePostAsync(Post userPost);
