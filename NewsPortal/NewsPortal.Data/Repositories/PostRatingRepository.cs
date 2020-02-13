@@ -6,30 +6,30 @@ using NewsPortal.Data.Models;
 
 namespace NewsPortal.Data.Repositories
 {
-    public class RatingRepository : Repository<PostRating>, IRatingRepository
+    public class PostRatingRepository : Repository<PostRating>, IPostRatingRepository
     {
         private readonly NewsPortalDbContext _context;
 
-        public RatingRepository(NewsPortalDbContext context) : base(context)
+        public PostRatingRepository(NewsPortalDbContext context) : base(context)
         {
             _context = context;
         }
 
         public async Task<PostRating> FindItem(int postId, int userId)
         {
-            return await _context.Ratings
+            return await _context.PostRatings
                 .Where(rating => rating.PostId == postId && rating.UserId == userId)
                 .FirstOrDefaultAsync();
         }
 
         public async Task DeleteItem(int postId, int userId)
         {
-            var rating = await _context.Ratings
+            var rating = await _context.PostRatings
                 .Where(rating => rating.PostId == postId && rating.UserId == userId)
                 .FirstOrDefaultAsync();
             if (rating != null)
             {
-                _context.Ratings.Remove(rating);
+                _context.PostRatings.Remove(rating);
             }
         }
 

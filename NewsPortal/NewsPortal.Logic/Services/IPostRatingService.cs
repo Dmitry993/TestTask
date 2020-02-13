@@ -3,7 +3,7 @@ using NewsPortal.Logic.Enums;
 
 namespace NewsPortal.Logic.Services
 {
-    public interface IRatingService
+    public interface IPostRatingService
     {
         Task AddRatingAsync(int postId, int userId, Rating value);
 
