@@ -15,14 +15,14 @@ namespace NewsPortal.Data.Repositories
             _context = context;
         }
 
-        public async Task<PostRating> FindItemByPostId(int postId, int userId)
+        public async Task<PostRating> FindItem(int postId, int userId)
         {
             return await _context.Ratings
                 .Where(rating => rating.PostId == postId && rating.UserId == userId)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task DeleteItemByPostId(int postId, int userId)
+        public async Task DeleteItem(int postId, int userId)
         {
             var rating = await _context.Ratings
                 .Where(rating => rating.PostId == postId && rating.UserId == userId)
@@ -32,5 +32,6 @@ namespace NewsPortal.Data.Repositories
                 _context.Ratings.Remove(rating);
             }
         }
+
     }
 }

@@ -3,6 +3,7 @@ using NewsPortal.Data.Repositories;
 using NewsPortal.Logic.Models;
 using System.Threading.Tasks;
 using NewsPortal.Data.Models;
+using NewsPortal.Logic.Enums;
 
 namespace NewsPortal.Logic.Services
 {
@@ -20,28 +21,38 @@ namespace NewsPortal.Logic.Services
             _postService = postService;
         }
 
-        public async Task<Rating> UserClickedRatingAsync(int postId, int userId, Rating value)
+        public async Task AddOrCancelRatingAsync(int postId, int userId, Rating value)
         {
-            var rating = await _repository.FindItemByPostId(postId, userId);
-            if (rating == null && !value.Equals(Rating.Nothing))
+            var postRating = await _repository.FindItem(postId, userId);
+            if (postRating == null && !value.Equals(Rating.None))
             {
                 await AddRatingAsync(postId, userId, value);
             }
-            if (rating != null && rating.Value == (int)value)
+            if (postRating != null && postRating.Value == (int)value)
             {
                 await CancelRatingAsync(postId, userId, value);
             }
+        }
 
-            var ratingValue = rating != null ? (Rating)rating.Value : Rating.Nothing;
-            return ratingValue;
+        public async Task<Rating> GetRatingAsync(int postId, int userId)
+        {
+            var postRating = await _repository.FindItem(postId, userId);
+            return postRating == null ? Rating.None : (Rating)postRating.Value;
         }
 
         public async Task CancelRatingAsync(int postId, int userId, Rating value)
         {
-            await _repository.DeleteItemByPostId(postId, userId);
+            await _repository.DeleteItem(postId, userId);
             await _repository.SaveAsync();
-            var reverseRating = Rating.Add.Equals(value) ? Rating.Subtract : Rating.Add;
-            await _postService.UpdatePostRatingAsync(postId, reverseRating);
+            switch (value)
+            {
+                case Rating.Plus:
+                    await _postService.DecreaseRatingAsync(postId);
+                    break;
+                case Rating.Minus:
+                    await _postService.IncreaseRatingAsync(postId);
+                    break;
+            }
         }
 
         public async Task AddRatingAsync(int postId, int userId, Rating value)
@@ -55,7 +66,15 @@ namespace NewsPortal.Logic.Services
 
             await _repository.CreateAsync(rating);
             await _repository.SaveAsync();
-            await _postService.UpdatePostRatingAsync(postId, value);
+            switch (value)
+            {
+                case Rating.Plus:
+                    await _postService.IncreaseRatingAsync(postId);
+                    break;
+                case Rating.Minus:
+                    await _postService.DecreaseRatingAsync(postId);
+                    break;
+            }
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NewsPortal.Logic.Models;
+using NewsPortal.Logic.Enums;
 using NewsPortal.Logic.Services;
 
 namespace NewsPortal.Web.Controllers
@@ -21,7 +19,7 @@ namespace NewsPortal.Web.Controllers
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
-            await _service.UserClickedRatingAsync(postId, userId, value);
+            await _service.AddOrCancelRatingAsync(postId, userId, value);
             return RedirectToAction("GetPostById", "Post", new { id = postId });
         }
     }

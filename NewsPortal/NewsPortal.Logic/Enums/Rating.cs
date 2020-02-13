@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NewsPortal.Logic.Models
+namespace NewsPortal.Logic.Enums
 {
     public enum Rating
     {
-        Add = 1,
-        Subtract = 2,
-        Nothing = 3
+        None,
+        Minus,
+        Plus
     }
 }

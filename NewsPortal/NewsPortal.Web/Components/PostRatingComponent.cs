@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NewsPortal.Logic.Models;
+using NewsPortal.Logic.Enums;
 using NewsPortal.Logic.Services;
 
 namespace NewsPortal.Web.Components
@@ -12,29 +10,26 @@ namespace NewsPortal.Web.Components
     public class PostRatingComponent : ViewComponent
     {
         private readonly IRatingService _ratingService;
-        private readonly IUserService _userService;
 
-        public PostRatingComponent(IRatingService ratingService, IUserService userService)
+        public PostRatingComponent(IRatingService ratingService)
         {
             _ratingService = ratingService;
-            _userService = userService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(int postId)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
-            var userClick = await _ratingService.UserClickedRatingAsync(postId, userId,Rating.Nothing);
-            if (userClick.Equals(Rating.Add))
+            var userClick = await _ratingService.GetRatingAsync(postId, userId);
+            switch (userClick)
             {
-                return Content("You clicked plus;");
+                case Rating.Plus:
+                    return Content("You clicked plus;");
+                case Rating.Minus:
+                    return Content("You clicked minus;");
+                default:
+                    return Content(String.Empty);
             }
-            if (userClick.Equals(Rating.Subtract))
-            {
-                return Content("You clicked minus;");
-            }
-
-            return Content(String.Empty);
         }
     }
 }

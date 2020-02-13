@@ -54,6 +54,12 @@ namespace NewsPortal.Data.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
+        public async Task UpdateAndSaveAsync(T item)
+        {
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
         public virtual void Dispose(bool disposing)
         {
             if (!this._disposed)

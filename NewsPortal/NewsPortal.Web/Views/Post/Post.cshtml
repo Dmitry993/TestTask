@@ -1,5 +1,5 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
-@using NewsPortal.Logic.Models
+@using NewsPortal.Logic.Enums
 @model NewsPortal.Logic.Models.Post
 @{
     ViewData["Title"] = "Post";
@@ -25,8 +25,8 @@
             {
                 <b style="margin-left: 50px">Rating:@Model.Rating</b>
                 <div class="btn-group" style="margin-left: 20px" role="group" aria-label="Basic example">
-                    @Html.ActionLink("+", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Add}, new {@class = "btn btn-primary"})
-                    @Html.ActionLink("-", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Subtract}, new {@class = "btn btn-primary"})
+                    @Html.ActionLink("+", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Plus}, new {@class = "btn btn-primary"})
+                    @Html.ActionLink("-", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Minus}, new {@class = "btn btn-primary"})
                 </div>
                 @await Component.InvokeAsync("PostRating", new {postId = Model.Id})
             }

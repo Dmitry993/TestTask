@@ -15,7 +15,7 @@ namespace NewsPortal.Logic.Services
         private readonly IPostRepository _repository;
         private readonly ICommentService _service;
 
-        public PostService(IMapper mapper, IPostRepository repository, 
+        public PostService(IMapper mapper, IPostRepository repository,
             ICommentService service)
         {
             _repository = repository;
@@ -53,19 +53,18 @@ namespace NewsPortal.Logic.Services
             return mappedPost;
         }
 
-        public async Task UpdatePostRatingAsync(int postId, Rating value)
+        public async Task IncreaseRatingAsync(int postId)
         {
             var post = await _repository.GetAsync(postId);
-            if (Rating.Add.Equals(value))
-            {
-                post.Rating += 1;
-            }
-            else
-            {
-                post.Rating -= 1;
-            }
-            _repository.Update(post);
-            await _repository.SaveAsync();
+            post.Rating++;
+            await _repository.UpdateAndSaveAsync(post);
+        }
+
+        public async Task DecreaseRatingAsync(int postId)
+        {
+            var post = await _repository.GetAsync(postId);
+            post.Rating--;
+            await _repository.UpdateAndSaveAsync(post);
         }
 
         public async Task<Post> UpdatePostAsync(Post userPost)

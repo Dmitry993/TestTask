@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using NewsPortal.Logic.Models;
+using NewsPortal.Logic.Enums;
 
 namespace NewsPortal.Logic.Services
 {
@@ -7,7 +7,9 @@ namespace NewsPortal.Logic.Services
     {
         Task AddRatingAsync(int postId, int userId, Rating value);
 
-        Task<Rating> UserClickedRatingAsync(int postId, int userId, Rating value);
+        Task AddOrCancelRatingAsync(int postId, int userId, Rating value);
+
+        Task<Rating> GetRatingAsync(int postId, int userId);
 
         Task CancelRatingAsync(int postId, int userId, Rating value);
     }
