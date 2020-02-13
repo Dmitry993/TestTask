@@ -11,6 +11,7 @@ namespace NewsPortal.Data.Repositories
         Task<T> GetAsync(int id);        
         Task<T> CreateAsync(T item);
         void Update(T item);
+        Task UpdateAndSaveAsync(T item);
         Task DeleteAsync(int id);
         Task SaveAsync();
     }

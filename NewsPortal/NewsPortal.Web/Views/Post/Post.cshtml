@@ -1,4 +1,5 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
+@using NewsPortal.Logic.Enums
 @model NewsPortal.Logic.Models.Post
 @{
     ViewData["Title"] = "Post";
@@ -20,8 +21,15 @@
             {
                 @(Html.ActionLink("Edit Post", "EditPost", "Post", Model, new { @class = "btn btn-success" }))
             }
-
-            @(Html.ActionLink("Go Home", "Index", "Home", null, new { @class = "btn btn-primary" }))
+            @if (!context.HttpContext.Request.Cookies["UserId"].Equals(Model.AuthorId.ToString()))
+            {
+                <b style="margin-left: 50px">Rating:@Model.Rating</b>
+                <div class="btn-group" style="margin-left: 20px" role="group" aria-label="Basic example">
+                    @Html.ActionLink("+", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Plus}, new {@class = "btn btn-primary"})
+                    @Html.ActionLink("-", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Minus}, new {@class = "btn btn-primary"})
+                </div>
+                @await Component.InvokeAsync("PostRating", new {postId = Model.Id})
+            }
         </div>
     </div>
     <div>

@@ -11,7 +11,7 @@
             <p>@comment.Description</p>
         </div>
         <div>
-           
+
                 <b style="margin-left: 20px">Reply:</b>
                 @await Component.InvokeAsync("CommentEditor", new
                 {
@@ -19,13 +19,13 @@
                     postId = comment.PostId,
                     comments = comment.Replies
                 })
-            
+
             <div>
                 @if (comment.Replies.Any())
                 {
-                    <div style="margin-left: 20px">
-                        @await Component.InvokeAsync("Comment", new { replies = comment.Replies })
-                    </div>
+                <div style="margin-left: 20px">
+                    @await Component.InvokeAsync("Comment", new { replies = comment.Replies })
+                </div>
                 }
 
             </div>

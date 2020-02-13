@@ -1,7 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -39,10 +38,10 @@ namespace NewsPortal.Web
             services.AddOptions();
             services.AddAutoMapper(
                 typeof(ApplicationUserProfile).Assembly,
-                typeof(UserProfile).Assembly, 
+                typeof(UserProfile).Assembly,
                 typeof(UserPostProfile).Assembly,
                 typeof(UserCommentProfile).Assembly);
-            services.AddMvc(options =>
+                services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
             });                     

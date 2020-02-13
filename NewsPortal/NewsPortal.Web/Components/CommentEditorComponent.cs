@@ -11,13 +11,6 @@ namespace NewsPortal.Web.Components
     [ViewComponent(Name = "CommentEditor")]
     public class CommentEditorComponent : ViewComponent
     {
-        private readonly IUserService _userService;
-
-        public CommentEditorComponent(IUserService userService)
-        {
-            _userService = userService;
-        }
-
         public Task<IViewComponentResult> InvokeAsync(List<Comment> comments, int postId, int? commentId = null)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];

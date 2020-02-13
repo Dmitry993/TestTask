@@ -10,13 +10,6 @@ namespace NewsPortal.Web.Components
     [ViewComponent(Name = "Comment")]
     public class CommentComponent : ViewComponent
     {
-        private ICommentService _commentService;
-
-        public CommentComponent(ICommentService commentService)
-        {
-            _commentService = commentService;
-        }
-
         public Task<IViewComponentResult> InvokeAsync(List<Comment> replies)
         {
             if (replies == null)
