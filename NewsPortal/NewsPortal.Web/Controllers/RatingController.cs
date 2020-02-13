@@ -19,7 +19,7 @@ namespace NewsPortal.Web.Controllers
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
-            await _service.AddOrCancelRatingAsync(postId, userId, value);
+            await _service.UpdateRatingAsync(postId, userId, value);
             return RedirectToAction("GetPostById", "Post", new { id = postId });
         }
     }

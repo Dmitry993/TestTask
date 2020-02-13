@@ -7,7 +7,7 @@ namespace NewsPortal.Logic.Services
     {
         Task AddRatingAsync(int postId, int userId, Rating value);
 
-        Task AddOrCancelRatingAsync(int postId, int userId, Rating value);
+        Task UpdateRatingAsync(int postId, int userId, Rating value);
 
         Task<Rating> GetRatingAsync(int postId, int userId);
 

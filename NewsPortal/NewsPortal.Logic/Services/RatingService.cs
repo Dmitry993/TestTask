@@ -21,7 +21,7 @@ namespace NewsPortal.Logic.Services
             _postService = postService;
         }
 
-        public async Task AddOrCancelRatingAsync(int postId, int userId, Rating value)
+        public async Task UpdateRatingAsync(int postId, int userId, Rating value)
         {
             var postRating = await _repository.FindItem(postId, userId);
             if (postRating == null && !value.Equals(Rating.None))
