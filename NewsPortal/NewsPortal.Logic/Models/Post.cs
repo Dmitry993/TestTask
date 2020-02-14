@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NewsPortal.Logic.Models
 {
@@ -15,6 +16,8 @@ namespace NewsPortal.Logic.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public DateTime Created { get; set; }
 
         public List<Comment> Comments { get; set; }
     }

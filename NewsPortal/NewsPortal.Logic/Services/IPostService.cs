@@ -1,6 +1,7 @@
 ﻿using NewsPortal.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NewsPortal.Logic.Enums;
 
 namespace NewsPortal.Logic.Services
 {
@@ -19,5 +20,8 @@ namespace NewsPortal.Logic.Services
         Task<Post> CreatePostAsync(Post userPost);
 
         Task<Post> UpdatePostAsync(Post userPost);
+
+        IEnumerable<Post> SortPosts(List<Post> posts, Sort sort, 
+            SortDirection direction);
     }
 }

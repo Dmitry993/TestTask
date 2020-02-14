@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NewsPortal.Logic.Enums;
 using NewsPortal.Logic.Models;
 
 
@@ -70,9 +71,32 @@ namespace NewsPortal.Logic.Services
         public async Task<Post> UpdatePostAsync(Post userPost)
         {
             var post = _mapper.Map<Data.Models.Post>(userPost);
+            userPost.Created = DateTime.UtcNow;
             _repository.Update(post);
             await _repository.SaveAsync();
             return _mapper.Map<Post>(post);
+        }
+
+        public IEnumerable<Post> SortPosts(List<Post> posts, Sort sort, 
+            SortDirection direction)
+        {
+            switch (sort)
+            {
+                case Sort.ByDate when 
+                    direction.Equals(SortDirection.Ascending):
+                    return posts.OrderBy(post => post.Created);
+                case Sort.ByRating when 
+                    direction.Equals(SortDirection.Ascending):
+                    return posts.OrderBy(post => post.Rating);
+                case Sort.ByDate when
+                    direction.Equals(SortDirection.Descending):
+                    return posts.OrderByDescending(post => post.Created);
+                case Sort.ByRating when
+                    direction.Equals(SortDirection.Descending):
+                    return posts.OrderByDescending(post => post.Rating);
+                default:
+                    return posts;
+            }
         }
     }
 }
