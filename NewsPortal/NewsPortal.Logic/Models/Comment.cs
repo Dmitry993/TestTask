@@ -12,6 +12,8 @@ namespace NewsPortal.Logic.Models
 
         public int UserId { get; set; }
 
+        public int Rating { get; set; }
+
         public ApplicationUser Author { get; set; }
 
         public string Description { get; set; }

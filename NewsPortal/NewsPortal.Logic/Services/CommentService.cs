@@ -55,5 +55,19 @@ namespace NewsPortal.Logic.Services
             comment.Replies = postComments.Where(reply => reply.ParentId == comment.Id).ToList();
             comment.Replies.ForEach(childComment => AddReplies(childComment, postComments));
         }
+
+        public async Task IncreaseRatingAsync(int commentId)
+        {
+            var comment = await _repository.GetAsync(commentId);
+            comment.Rating++;
+            await _repository.UpdateAndSaveAsync(comment);
+        }
+
+        public async Task DecreaseRatingAsync(int commentId)
+        {
+            var comment = await _repository.GetAsync(commentId);
+            comment.Rating--;
+            await _repository.UpdateAndSaveAsync(comment);
+        }
     }
 }

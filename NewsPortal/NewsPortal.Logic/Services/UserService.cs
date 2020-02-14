@@ -11,7 +11,7 @@ namespace NewsPortal.Logic.Services
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly IUserRepository _repository;         
+        private readonly IUserRepository _repository;
 
         public UserService(IMapper mapper, IUserRepository repository)
         {
@@ -23,7 +23,7 @@ namespace NewsPortal.Logic.Services
         {
             var user = _mapper.Map<User>(applicationUser);
             user.Created = DateTime.UtcNow;
-            await _repository.CreateAsync(user);           
+            await _repository.CreateAsync(user);
             await _repository.SaveAsync();
             return _mapper.Map<ApplicationUser>(user);
         }
@@ -34,7 +34,7 @@ namespace NewsPortal.Logic.Services
 
             if (user == null)
             {                
-                return await CreateUserAsync(applicationUser);             
+                return await CreateUserAsync(applicationUser);
             }
                         
             return _mapper.Map<ApplicationUser>(user);

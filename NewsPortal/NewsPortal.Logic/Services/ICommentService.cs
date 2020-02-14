@@ -15,5 +15,9 @@ namespace NewsPortal.Logic.Services
         Task<Comment> CreateCommentAsync(Comment post);
 
         Task<IEnumerable<Comment>> GetPostCommentsAsync(int id);
+
+        Task IncreaseRatingAsync(int commentId);
+
+        Task DecreaseRatingAsync(int commentId);
     }
 }
