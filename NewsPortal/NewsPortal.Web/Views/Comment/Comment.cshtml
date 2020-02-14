@@ -1,4 +1,6 @@
-﻿@model IEnumerable<NewsPortal.Logic.Models.Comment>
+﻿@using NewsPortal.Logic.Enums
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor context
+@model IEnumerable<NewsPortal.Logic.Models.Comment>
 
 @{
 }
@@ -10,22 +12,42 @@
             <b> @comment.Author.UserName</b>
             <p>@comment.Description</p>
         </div>
+        <div class="row">
+            @if (!context.HttpContext.Request.Cookies["UserId"].Equals(comment.UserId.ToString()))
+            {
+                <b style="margin-left: 50px">Rating:@comment.Rating</b>
+                <div class="btn-group btn-group-sm" style="margin-left: 20px" role="group" aria-label="Basic example">
+                    @Html.ActionLink("+", "ChangeCommentRating", "Rating", new
+                    {
+                        commentId = comment.Id,
+                        postId = comment.PostId,
+                        value = Rating.Plus
+                    }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("-", "ChangeCommentRating", "Rating", new
+                    {
+                        commentId = comment.Id,
+                        postId = comment.PostId,
+                        value = Rating.Minus
+                    }, new { @class = "btn btn-primary" })
+                </div>
+                @await Component.InvokeAsync("Rating", new { commentId = comment.Id })
+            }
+        </div>
         <div>
-
-                <b style="margin-left: 20px">Reply:</b>
-                @await Component.InvokeAsync("CommentEditor", new
-                {
-                    commentId = comment.Id,
-                    postId = comment.PostId,
-                    comments = comment.Replies
-                })
+            <b style="margin-left: 20px">Reply:</b>
+            @await Component.InvokeAsync("CommentEditor", new
+            {
+                commentId = comment.Id,
+                postId = comment.PostId,
+                comments = comment.Replies
+            })
 
             <div>
                 @if (comment.Replies.Any())
                 {
-                <div style="margin-left: 20px">
-                    @await Component.InvokeAsync("Comment", new { replies = comment.Replies })
-                </div>
+                    <div style="margin-left: 20px">
+                        @await Component.InvokeAsync("Comment", new { replies = comment.Replies })
+                    </div>
                 }
 
             </div>
