@@ -6,7 +6,7 @@ using NewsPortal.Data.Models;
 
 namespace NewsPortal.Data.Repositories
 {
-    public interface IRatingRepository : IRepository<PostRating>
+    public interface IPostRatingRepository : IRepository<PostRating>
     {
         Task<PostRating> FindItem(int postId, int userId);
 

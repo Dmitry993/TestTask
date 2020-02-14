@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Http;
-using NewsPortal.Data.Model;
 using NewsPortal.Data.Repositories;
 using NewsPortal.Logic.Services;
 
@@ -38,12 +37,20 @@ namespace NewsPortal.Web
                 .As<ICommentService>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<RatingRepository>()
-                .As<IRatingRepository>()
+            builder.RegisterType<PostRatingRepository>()
+                .As<IPostRatingRepository>()
                 .InstancePerLifetimeScope();
             
-            builder.RegisterType<RatingService>()
-                .As<IRatingService>()
+            builder.RegisterType<PostRatingService>()
+                .As<IPostRatingService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CommentRatingRepository>()
+                .As<ICommentRatingRepository>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<CommentRatingService>()
+                .As<ICommentRatingService>()
                 .InstancePerLifetimeScope();
         }
     }

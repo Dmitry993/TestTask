@@ -28,7 +28,7 @@
                     @Html.ActionLink("+", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Plus}, new {@class = "btn btn-primary"})
                     @Html.ActionLink("-", "ChangePostRating", "Rating", new {postId = Model.Id, value = Rating.Minus}, new {@class = "btn btn-primary"})
                 </div>
-                @await Component.InvokeAsync("PostRating", new {postId = Model.Id})
+                @await Component.InvokeAsync("Rating", new {postId = Model.Id})
             }
         </div>
     </div>

@@ -1,23 +1,21 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using NewsPortal.Data.Repositories;
-using NewsPortal.Logic.Models;
 using System.Threading.Tasks;
 using NewsPortal.Data.Models;
 using NewsPortal.Logic.Enums;
 
 namespace NewsPortal.Logic.Services
 {
-    public class RatingService : IRatingService
+    public class PostRatingService : IPostRatingService
     {
-        private readonly IMapper _mapper;
-        private readonly IRatingRepository _repository;
+        private readonly IPostRatingRepository _repository;
         private readonly IPostService _postService;
 
-        public RatingService(IRatingRepository repository, IMapper mapper,
-            IPostService postService)
+
+        public PostRatingService(IPostRatingRepository repository, IPostService postService)
         {
             _repository = repository;
-            _mapper = mapper;
             _postService = postService;
         }
 
@@ -57,14 +55,15 @@ namespace NewsPortal.Logic.Services
 
         public async Task AddRatingAsync(int postId, int userId, Rating value)
         {
-            var rating = new PostRating()
+            var postRating = new PostRating()
             {
                 PostId = postId,
                 UserId = userId,
-                Value = (int)value
+                Value = (int)value,
+                Created = DateTime.UtcNow
             };
 
-            await _repository.CreateAsync(rating);
+            await _repository.CreateAsync(postRating);
             await _repository.SaveAsync();
             switch (value)
             {

@@ -15,6 +15,8 @@ namespace NewsPortal.Data.Models
 
         public int UserId { get; set; }
 
+        public int Rating { get; set; }
+
         public User Author { get; set; }
 
         public string Description { get; set; }

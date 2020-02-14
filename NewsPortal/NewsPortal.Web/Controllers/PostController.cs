@@ -10,7 +10,7 @@ namespace NewsPortal.Web.Controllers
     [CustomAuthorize]
     public class PostController : Controller
     {
-        private IPostService _postService;
+        private readonly IPostService _postService;
 
         public PostController(IPostService postService)
         {

@@ -6,21 +6,25 @@ using NewsPortal.Logic.Services;
 
 namespace NewsPortal.Web.Components
 {
-    [ViewComponent(Name = "PostRating")]
-    public class PostRatingComponent : ViewComponent
+    [ViewComponent(Name = "Rating")]
+    public class RatingComponent : ViewComponent
     {
-        private readonly IRatingService _ratingService;
+        private readonly IPostRatingService _postRating;
+        private readonly ICommentRatingService _commentRating;
 
-        public PostRatingComponent(IRatingService ratingService)
+        public RatingComponent(IPostRatingService postRating, ICommentRatingService commentRating)
         {
-            _ratingService = ratingService;
+            _postRating = postRating;
+            _commentRating = commentRating;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int postId)
+        public async Task<IViewComponentResult> InvokeAsync(int postId, int commentId)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
-            var userClick = await _ratingService.GetRatingAsync(postId, userId);
+            var userClick = postId == 0
+                ? await _commentRating.GetRatingAsync(commentId, userId)
+                : await _postRating.GetRatingAsync(postId, userId);
             switch (userClick)
             {
                 case Rating.Plus:
