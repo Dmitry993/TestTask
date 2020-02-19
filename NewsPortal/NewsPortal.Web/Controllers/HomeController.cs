@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NewsPortal.Logic.Enums;
@@ -19,12 +20,12 @@ namespace NewsPortal.Web.Controllers
 
         public IActionResult Index()
         {
-            ViewData["sort"] = Sort.None;
-            ViewData["direction"] = SortDirection.Ascending;
+            ViewData["sortBy"] = SortBy.None;
+            ViewData["direction"] = ListSortDirection.Ascending;
             return View();
         }
 
-        public async Task<IActionResult> GetUser(Sort sort, SortDirection direction)
+        public async Task<IActionResult> GetUser(SortBy sort, ListSortDirection direction)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
@@ -35,7 +36,7 @@ namespace NewsPortal.Web.Controllers
             {
                 return RedirectToAction("GoogleSignOut", "Auth");
             }
-            ViewData["sort"] = sort;
+            ViewData["sortBy"] = sort;
             ViewData["direction"] = direction;
             return View("UserProfile", user);
         }

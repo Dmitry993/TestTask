@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NewsPortal.Logic.Enums;
@@ -69,9 +70,9 @@ namespace NewsPortal.Web.Controllers
             return Forbid();
         }
 
-        public IActionResult SortPosts(Sort sort, SortDirection direction, string pageName)
+        public IActionResult SortPosts(SortBy sort, ListSortDirection direction, string pageName)
         {
-            ViewData["sort"] = sort;
+            ViewData["sortBy"] = sort;
             ViewData["direction"] = direction;
             if (pageName.Equals("UserProfile"))
             {

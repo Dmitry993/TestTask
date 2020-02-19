@@ -1,5 +1,5 @@
-﻿@using NewsPortal.Logic.Enums
-@using NewsPortal.Web.Controllers
+﻿@using System.ComponentModel
+@using NewsPortal.Logic.Enums
 
 
 @{
@@ -15,41 +15,10 @@
 <div>
     <div class="row">
         <h5>Recently posts:</h5>
-        <div class="btn-group btn-group-sm" style="margin-left: 400px" role="group">
-            @Html.ActionLink("By Date", "SortPosts", "Post", new
-            {
-                sort = Sort.ByDate,
-                pageName = @ViewData["Title"]
-            }, new { @class = "btn btn-outline-dark" })
-            @Html.ActionLink("By Rating", "SortPosts", "Post", new
-            {
-                sort = Sort.ByRating,
-                pageName = @ViewData["Title"]
-            }, new { @class = "btn btn-outline-dark" })
-            @if (ViewData["direction"].Equals(SortDirection.Ascending))
-            {
-                @Html.ActionLink("Ascending", "SortPosts", "Post", new
-                {
-                    sort = ViewData["sort"],
-                    direction = SortDirection.Descending,
-                    pageName = @ViewData["Title"]
-                }, new { @class = "btn btn-outline-dark" })
-            }
-            else
-            {
-                @Html.ActionLink("Descending", "SortPosts", "Post", new
-                {
-                    sort = ViewData["sort"],
-                    direction = SortDirection.Ascending,
-                    pageName = @ViewData["Title"]
-                }, new { @class = "btn btn-outline-dark" })
-            }
-
-        </div>
     </div>
     @await Component.InvokeAsync("PostList", new
     {
-        sort = ViewData["sort"], 
+        sort = ViewData["sortBy"], 
         direction = ViewData["direction"]
     })
 </div>

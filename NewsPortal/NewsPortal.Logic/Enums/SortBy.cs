@@ -4,10 +4,10 @@ using System.Text;
 
 namespace NewsPortal.Logic.Enums
 {
-    public enum Sort
+    public enum SortBy
     {
         None,
-        ByDate,
-        ByRating
+        Date,
+        Rating
     }
 }

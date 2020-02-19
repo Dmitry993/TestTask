@@ -2,6 +2,7 @@
 using NewsPortal.Data.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using NewsPortal.Logic.Enums;
@@ -77,25 +78,27 @@ namespace NewsPortal.Logic.Services
             return _mapper.Map<Post>(post);
         }
 
-        public IEnumerable<Post> SortPosts(List<Post> posts, Sort sort, 
-            SortDirection direction)
+        public IEnumerable<Post> GetSortedPosts(SortBy sortBy, bool isDescending, int userId)
         {
-            switch (sort)
+            Func<Data.Models.Post, DateTime> timeExpression = post => post.Created;
+            Func<Data.Models.Post, int> ratingExpression = post => post.Rating;
+
+            switch (sortBy)
             {
-                case Sort.ByDate when 
-                    direction.Equals(SortDirection.Ascending):
-                    return posts.OrderBy(post => post.Created);
-                case Sort.ByRating when 
-                    direction.Equals(SortDirection.Ascending):
-                    return posts.OrderBy(post => post.Rating);
-                case Sort.ByDate when
-                    direction.Equals(SortDirection.Descending):
-                    return posts.OrderByDescending(post => post.Created);
-                case Sort.ByRating when
-                    direction.Equals(SortDirection.Descending):
-                    return posts.OrderByDescending(post => post.Rating);
+                case SortBy.Date when !isDescending:
+                    return _mapper.Map<IEnumerable<Post>>(
+                        _repository.GetSortedPosts(userId, timeExpression, false));
+                case SortBy.Rating when !isDescending:
+                    return _mapper.Map<IEnumerable<Post>>(
+                        _repository.GetSortedPosts(userId, ratingExpression, false));
+                case SortBy.Date when isDescending:
+                    return _mapper.Map<IEnumerable<Post>>(
+                        _repository.GetSortedPosts(userId, timeExpression, true));
+                case SortBy.Rating when isDescending:
+                    return _mapper.Map<IEnumerable<Post>>(
+                        _repository.GetSortedPosts(userId, ratingExpression, true));
                 default:
-                    return posts;
+                    return null;
             }
         }
     }

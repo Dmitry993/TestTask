@@ -1,5 +1,6 @@
 ﻿using NewsPortal.Logic.Models;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using NewsPortal.Logic.Enums;
 
@@ -21,7 +22,7 @@ namespace NewsPortal.Logic.Services
 
         Task<Post> UpdatePostAsync(Post userPost);
 
-        IEnumerable<Post> SortPosts(List<Post> posts, Sort sort, 
-            SortDirection direction);
+        IEnumerable<Post> GetSortedPosts(SortBy sort,
+            bool isDescending, int userId);
     }
 }

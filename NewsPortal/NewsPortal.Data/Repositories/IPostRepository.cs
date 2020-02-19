@@ -9,5 +9,7 @@ namespace NewsPortal.Data.Repositories
     public interface IPostRepository : IRepository<Post>
     {
         Task<IEnumerable<Post>> FindPostsByUserId(int id);
+
+        IEnumerable<Post> GetSortedPosts<T>(int userId, Func<Post, T> expression, bool isDescending);
     }
 }
