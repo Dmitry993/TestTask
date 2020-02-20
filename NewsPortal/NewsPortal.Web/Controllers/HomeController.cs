@@ -25,7 +25,7 @@ namespace NewsPortal.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetUser(SortBy sort, bool isDescending)
+        public async Task<IActionResult> GetUser(SortBy sort, bool isDescending, int? page)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
@@ -38,6 +38,7 @@ namespace NewsPortal.Web.Controllers
             }
             ViewData["sortBy"] = sort;
             ViewData["isDescending"] = isDescending;
+            ViewData["pageNumber"] = page;
             return View("UserProfile", user);
         }
     }

@@ -32,7 +32,8 @@
         {
             userId = Model.Id,
             sort = ViewData["sortBy"],
-            isDescending = (bool)ViewData["isDescending"]
+            isDescending = ViewData["isDescending"],
+            page = ViewData["pageNumber"]
         })
     </div>
 </div>

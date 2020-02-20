@@ -1,5 +1,7 @@
 ﻿@using NewsPortal.Logic.Enums
-@model IEnumerable<NewsPortal.Logic.Models.Post>
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Mvc.Core.Common
+@model X.PagedList.IPagedList<NewsPortal.Logic.Models.Post>
 
 @{
     Layout = "_LayoutWithoutNavbar";
@@ -10,12 +12,14 @@
         @Html.ActionLink("By Date", "SortPosts", "Post", new
         {
             sort = SortBy.Date,
-            pageName = @ViewData["Title"]
+            pageName = @ViewData["Title"],
+            page = 1
         }, new { @class = "btn btn-outline-dark" })
         @Html.ActionLink("By Rating", "SortPosts", "Post", new
         {
             sort = SortBy.Rating,
-            pageName = @ViewData["Title"]
+            pageName = @ViewData["Title"],
+            page = 1
         }, new { @class = "btn btn-outline-dark" })
         @if (ViewData["isDescending"].Equals(false))
         {
@@ -23,7 +27,8 @@
             {
                 sort = ViewData["sortBy"],
                 isDescending = true,
-                pageName = @ViewData["Title"]
+                pageName = @ViewData["Title"],
+                page = 1
             }, new { @class = "btn btn-outline-dark" })
         }
         else
@@ -32,7 +37,8 @@
             {
                 sort = ViewData["sortBy"],
                 isDescending = false,
-                pageName = @ViewData["Title"]
+                pageName = @ViewData["Title"],
+                page = 1
             }, new { @class = "btn btn-outline-dark" })
         }
 
@@ -49,4 +55,17 @@
             </div>
         </div>
     }
+
+    @Html.PagedListPager(Model, page => Url.Action("SortPosts", "Post", new
+    {
+        page,
+        sort = ViewData["sortBy"],
+        isDescending = ViewData["isDescending"],
+        pageName = ViewData["Title"]
+    }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+        })
 </div>

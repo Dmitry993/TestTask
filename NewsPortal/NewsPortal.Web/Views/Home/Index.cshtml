@@ -15,6 +15,7 @@
     @await Component.InvokeAsync("PostList", new
     {
         sort = ViewData["sortBy"], 
-        isDescending = (bool)ViewData["isDescending"]
+        isDescending = ViewData["isDescending"],
+        page = ViewData["pageNumber"]
     })
 </div>
