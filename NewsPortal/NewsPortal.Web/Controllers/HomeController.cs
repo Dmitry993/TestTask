@@ -21,7 +21,7 @@ namespace NewsPortal.Web.Controllers
         public IActionResult Index()
         {
             ViewData["sortBy"] = SortBy.None;
-            ViewData["direction"] = false;
+            ViewData["isDescending"] = false;
             return View();
         }
 
@@ -37,7 +37,7 @@ namespace NewsPortal.Web.Controllers
                 return RedirectToAction("GoogleSignOut", "Auth");
             }
             ViewData["sortBy"] = sort;
-            ViewData["direction"] = isDescending;
+            ViewData["isDescending"] = isDescending;
             return View("UserProfile", user);
         }
     }

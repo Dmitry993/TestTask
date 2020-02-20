@@ -1,5 +1,4 @@
-﻿@using System.ComponentModel
-@using NewsPortal.Logic.Enums
+﻿@using NewsPortal.Logic.Enums
 @model IEnumerable<NewsPortal.Logic.Models.Post>
 
 @{
@@ -18,7 +17,7 @@
             sort = SortBy.Rating,
             pageName = @ViewData["Title"]
         }, new { @class = "btn btn-outline-dark" })
-        @if (ViewData["direction"].Equals(false))
+        @if (ViewData["isDescending"].Equals(false))
         {
             @Html.ActionLink("Ascending", "SortPosts", "Post", new
             {

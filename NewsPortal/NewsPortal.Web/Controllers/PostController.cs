@@ -73,7 +73,7 @@ namespace NewsPortal.Web.Controllers
         public IActionResult SortPosts(SortBy sort, bool isDescending, string pageName)
         {
             ViewData["sortBy"] = sort;
-            ViewData["direction"] = isDescending;
+            ViewData["isDescending"] = isDescending;
             if (pageName.Equals("UserProfile"))
             {
                 return RedirectToAction("GetUser", "Home", new
