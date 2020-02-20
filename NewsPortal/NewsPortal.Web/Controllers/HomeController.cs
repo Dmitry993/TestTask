@@ -21,11 +21,11 @@ namespace NewsPortal.Web.Controllers
         public IActionResult Index()
         {
             ViewData["sortBy"] = SortBy.None;
-            ViewData["direction"] = ListSortDirection.Ascending;
+            ViewData["direction"] = false;
             return View();
         }
 
-        public async Task<IActionResult> GetUser(SortBy sort, ListSortDirection direction)
+        public async Task<IActionResult> GetUser(SortBy sort, bool isDescending)
         {
             var userIdString = HttpContext.Request.Cookies["UserId"];
             var userId = Int32.Parse(userIdString);
@@ -37,7 +37,7 @@ namespace NewsPortal.Web.Controllers
                 return RedirectToAction("GoogleSignOut", "Auth");
             }
             ViewData["sortBy"] = sort;
-            ViewData["direction"] = direction;
+            ViewData["direction"] = isDescending;
             return View("UserProfile", user);
         }
     }

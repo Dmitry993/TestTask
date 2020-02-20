@@ -18,12 +18,12 @@
             sort = SortBy.Rating,
             pageName = @ViewData["Title"]
         }, new { @class = "btn btn-outline-dark" })
-        @if (ViewData["direction"].Equals(ListSortDirection.Ascending))
+        @if (ViewData["direction"].Equals(false))
         {
             @Html.ActionLink("Ascending", "SortPosts", "Post", new
             {
                 sort = ViewData["sortBy"],
-                direction = ListSortDirection.Descending,
+                isDescending = true,
                 pageName = @ViewData["Title"]
             }, new { @class = "btn btn-outline-dark" })
         }
@@ -32,7 +32,7 @@
             @Html.ActionLink("Descending", "SortPosts", "Post", new
             {
                 sort = ViewData["sortBy"],
-                direction = ListSortDirection.Ascending,
+                isDescending = false,
                 pageName = @ViewData["Title"]
             }, new { @class = "btn btn-outline-dark" })
         }

@@ -16,7 +16,7 @@ namespace NewsPortal.Web.Views.Components
             _postService = postService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int userId, SortBy sort, ListSortDirection direction)
+        public async Task<IViewComponentResult> InvokeAsync(int userId, SortBy sort, bool isDescending)
         {
             if (sort == SortBy.None)
             {
@@ -26,8 +26,6 @@ namespace NewsPortal.Web.Views.Components
             
                 return View("/Views/Post/PostList.cshtml", posts);
             }
-
-            var isDescending = direction == ListSortDirection.Descending;
 
             var sortedPosts = _postService.GetSortedPosts(sort, isDescending, userId);
 

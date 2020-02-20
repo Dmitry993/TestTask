@@ -70,16 +70,16 @@ namespace NewsPortal.Web.Controllers
             return Forbid();
         }
 
-        public IActionResult SortPosts(SortBy sort, ListSortDirection direction, string pageName)
+        public IActionResult SortPosts(SortBy sort, bool isDescending, string pageName)
         {
             ViewData["sortBy"] = sort;
-            ViewData["direction"] = direction;
+            ViewData["direction"] = isDescending;
             if (pageName.Equals("UserProfile"))
             {
                 return RedirectToAction("GetUser", "Home", new
                 {
-                    sort = sort, 
-                    direction = direction
+                    sort = sort,
+                    isDescending = isDescending
                 });
             }
             return View($"/Views/Home/Index.cshtml");

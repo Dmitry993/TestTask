@@ -12,7 +12,7 @@ namespace NewsPortal.Data.Repositories
     {
         private readonly NewsPortalDbContext _context;
 
-        public PostRepository(NewsPortalDbContext context): base(context)
+        public PostRepository(NewsPortalDbContext context) : base(context)
         {
             _context = context;
         }
@@ -23,14 +23,12 @@ namespace NewsPortal.Data.Repositories
             return allPosts;
         }
 
-        public IEnumerable<Post> GetSortedPosts<T>(int userId, Func<Post, T> expression, bool isDescending)
+        public IEnumerable<Post> GetSortedPosts<T>(int userId, Func<Post, T> keySelector, bool isDescending)
         {
-            var sortedPosts = isDescending
-                ? _context.Posts.Where(post => post.AuthorId == userId || userId == 0).ToList()
-                    .OrderByDescending(expression)
-                : _context.Posts.Where(post => post.AuthorId == userId || userId == 0).ToList()
-                    .OrderBy(expression);
-            return sortedPosts;
+            var posts = _context.Posts.Where(post => post.AuthorId == userId || userId == 0);
+            return isDescending
+                ? posts.OrderByDescending(keySelector).ToList()
+                : posts.OrderBy(keySelector).ToList();
         }
     }
 }

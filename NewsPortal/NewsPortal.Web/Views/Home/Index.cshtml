@@ -15,6 +15,6 @@
     @await Component.InvokeAsync("PostList", new
     {
         sort = ViewData["sortBy"], 
-        direction = ViewData["direction"]
+        isDescending = (bool)ViewData["direction"]
     })
 </div>

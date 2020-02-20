@@ -79,26 +79,11 @@ namespace NewsPortal.Logic.Services
 
         public IEnumerable<Post> GetSortedPosts(SortBy sort, bool isDescending, int userId)
         {
-            Func<Data.Models.Post, DateTime> timeExp = post => post.Created;
-            Func<Data.Models.Post, int> ratingExp = post => post.Rating;
+            var sortedPosts = sort == SortBy.Date 
+                ? _repository.GetSortedPosts(userId, post => post.Created, isDescending)
+                : _repository.GetSortedPosts(userId, post => post.Rating, isDescending);
 
-            switch (sort)
-            {
-                case SortBy.Date when !isDescending:
-                    return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, timeExp, false));
-                case SortBy.Rating when !isDescending:
-                    return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, ratingExp, false));
-                case SortBy.Date when isDescending:
-                    return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, timeExp, true));
-                case SortBy.Rating when isDescending:
-                    return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, ratingExp, true));
-                default:
-                    return null;
-            }
+            return _mapper.Map<IEnumerable<Post>>(sortedPosts);
         }
     }
 }
