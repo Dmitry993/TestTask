@@ -2,7 +2,6 @@
 using NewsPortal.Data.Repositories;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using NewsPortal.Logic.Enums;
@@ -78,25 +77,25 @@ namespace NewsPortal.Logic.Services
             return _mapper.Map<Post>(post);
         }
 
-        public IEnumerable<Post> GetSortedPosts(SortBy sortBy, bool isDescending, int userId)
+        public IEnumerable<Post> GetSortedPosts(SortBy sort, bool isDescending, int userId)
         {
-            Func<Data.Models.Post, DateTime> timeExpression = post => post.Created;
-            Func<Data.Models.Post, int> ratingExpression = post => post.Rating;
+            Func<Data.Models.Post, DateTime> timeExp = post => post.Created;
+            Func<Data.Models.Post, int> ratingExp = post => post.Rating;
 
-            switch (sortBy)
+            switch (sort)
             {
                 case SortBy.Date when !isDescending:
                     return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, timeExpression, false));
+                        _repository.GetSortedPosts(userId, timeExp, false));
                 case SortBy.Rating when !isDescending:
                     return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, ratingExpression, false));
+                        _repository.GetSortedPosts(userId, ratingExp, false));
                 case SortBy.Date when isDescending:
                     return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, timeExpression, true));
+                        _repository.GetSortedPosts(userId, timeExp, true));
                 case SortBy.Rating when isDescending:
                     return _mapper.Map<IEnumerable<Post>>(
-                        _repository.GetSortedPosts(userId, ratingExpression, true));
+                        _repository.GetSortedPosts(userId, ratingExp, true));
                 default:
                     return null;
             }
