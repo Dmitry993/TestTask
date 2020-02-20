@@ -1,16 +1,48 @@
-﻿@model IEnumerable<NewsPortal.Logic.Models.Post>
+﻿@using NewsPortal.Logic.Enums
+@model IEnumerable<NewsPortal.Logic.Models.Post>
 
 @{
     Layout = "_LayoutWithoutNavbar";
 }
 
 <div>
+    <div class="btn-group btn-group-sm" style="margin-left: 60%" role="group">
+        @Html.ActionLink("By Date", "SortPosts", "Post", new
+        {
+            sort = SortBy.Date,
+            pageName = @ViewData["Title"]
+        }, new { @class = "btn btn-outline-dark" })
+        @Html.ActionLink("By Rating", "SortPosts", "Post", new
+        {
+            sort = SortBy.Rating,
+            pageName = @ViewData["Title"]
+        }, new { @class = "btn btn-outline-dark" })
+        @if (ViewData["isDescending"].Equals(false))
+        {
+            @Html.ActionLink("Ascending", "SortPosts", "Post", new
+            {
+                sort = ViewData["sortBy"],
+                isDescending = true,
+                pageName = @ViewData["Title"]
+            }, new { @class = "btn btn-outline-dark" })
+        }
+        else
+        {
+            @Html.ActionLink("Descending", "SortPosts", "Post", new
+            {
+                sort = ViewData["sortBy"],
+                isDescending = false,
+                pageName = @ViewData["Title"]
+            }, new { @class = "btn btn-outline-dark" })
+        }
+
+    </div>
     @foreach (var post in Model)
     {
         <div class="form-horizontal">
             <hr />
             <div class="form-group">
-                <h4>@Html.ActionLink(post.Name, "GetPostById", "Post", new {id = post.Id})</h4>
+                <h4>@Html.ActionLink(post.Name, "GetPostById", "Post", new { id = post.Id })</h4>
             </div>
             <div class="form-group">
                 @post.Description

@@ -1,18 +1,18 @@
 ﻿@model NewsPortal.Logic.Models.ApplicationUser
 
 @{
-    ViewBag.Title = "Personal Page";
+    ViewBag.Title = "UserProfile";
     Layout = "_Layout";
 }
 
 <div class="row">
     <div>
-        <h1>@ViewBag.Title</h1>
+        <h1>Personal page</h1>
 
         @(Html.ActionLink("Create publication", "CreatePost", "Post", null, new { @class = "btn btn-success" }))
         @(Html.ActionLink("Go back", "Index", "Home", null, new { @class = "btn btn-primary" }))
-        
-    </div >
+
+    </div>
 </div>
 <div>
     <ul class="list-group list-group-flush">
@@ -24,8 +24,15 @@
     </ul>
 </div>
 <div>
-    <h5>User posts:</h5>
+    <div class="row">
+        <h5>User posts:</h5>
+    </div>
     <div>
-        @await Component.InvokeAsync("PostList",  new { id = Model.Id })
+        @await Component.InvokeAsync("PostList", new
+        {
+            userId = Model.Id,
+            sort = ViewData["sortBy"],
+            isDescending = (bool)ViewData["isDescending"]
+        })
     </div>
 </div>

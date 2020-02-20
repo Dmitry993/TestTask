@@ -1,14 +1,20 @@
 ﻿@{
-    ViewBag.Title = "Home page";
+    ViewBag.Title = "Index";
     Layout = "_Layout";
 }
 
 <div class="row">
     <div>
-        <h1>@ViewBag.Title</h1>
+        <h1>Home page</h1>
     </div>
 </div>
 <div>
-    <h5>Recently posts:</h5>
-    @await Component.InvokeAsync("PostList")
+    <div class="row">
+        <h5>Recently posts:</h5>
+    </div>
+    @await Component.InvokeAsync("PostList", new
+    {
+        sort = ViewData["sortBy"], 
+        isDescending = (bool)ViewData["isDescending"]
+    })
 </div>

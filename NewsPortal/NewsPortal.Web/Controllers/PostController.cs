@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NewsPortal.Logic.Enums;
 using NewsPortal.Logic.Models;
 using NewsPortal.Logic.Services;
 using NewsPortal.Web.Attributes;
@@ -66,6 +68,21 @@ namespace NewsPortal.Web.Controllers
             }
 
             return Forbid();
+        }
+
+        public IActionResult SortPosts(SortBy sort, bool isDescending, string pageName)
+        {
+            ViewData["sortBy"] = sort;
+            ViewData["isDescending"] = isDescending;
+            if (pageName.Equals("UserProfile"))
+            {
+                return RedirectToAction("GetUser", "Home", new
+                {
+                    sort = sort,
+                    isDescending = isDescending
+                });
+            }
+            return View($"/Views/Home/Index.cshtml");
         }
 
         private bool UserIsOwner(Post userPost)

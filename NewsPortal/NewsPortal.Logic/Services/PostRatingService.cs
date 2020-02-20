@@ -12,7 +12,6 @@ namespace NewsPortal.Logic.Services
         private readonly IPostRatingRepository _repository;
         private readonly IPostService _postService;
 
-
         public PostRatingService(IPostRatingRepository repository, IPostService postService)
         {
             _repository = repository;
